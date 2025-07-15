@@ -1,0 +1,33 @@
+The data in this folder comes from 25 healthy subjects tested with the DIGNUMWORDS-SHAPE paradigm in which number sets (parity or control sets) are alternating at 7.5 Hz while their EEG activity is recorded with 68 channels (+ 2 external, EOG channels) at 512 Hz. 
+We are interested in the frequency response at 3.75 Hz (7.5 Hz) reflecting the discrimination (or absence of discrimination) between the two number sets that are alternating while he response at 7.5 Hz reflects more general brain synchronization processes at the frequency of stimulus presentation. 
+
+There are 12 different conditions following a Stimulus Modality (digits or number words) x Stimulus Font (1 font, 20 standard fonts or 20 atypical fonts) x Number Set Type (parity or control) structure: 
+- Digit / 1 font / control number sets alternating, abbreviated in file name as Dig_1F_C1 condition
+- Digit / 1 font / parity number sets alternating, abbreviated as Dig_1F_Par condition
+- Digit / 20 fonts standard / control number sets alternating, abbreviated in file name as Dig_20F_S_C1 condition
+- Digit / 20 fonts standard / parity number sets alternating, abbreviated in file name as Dig_20F_S_Par condition
+- Digit / 20 fonts atypical / control number sets alternating, abbreviated in file name as Dig_20F_A_C1 condition
+- Digit / 20 fonts atypical / parity number sets alternating, abbreviated in file name as Dig_20F_A_Par condition
+- German number words / 1 font / control number sets alternating, abbreviated in file name as NumWo_1F_C1 condition
+- German number words / 1 font / parity number sets alternating, abbreviated in file name as NumWo_1F_Par condition
+- German number words / 20 fonts standard / control number sets alternating, abbreviated in file name as NumWo_20F_S_C1 condition
+- German number words / 20 fonts standard / parity number sets alternating, abbreviated in file name as NumWo_20F_S_Par condition
+- German number words / 20 fonts atypical / control number sets alternating, abbreviated in file name as NumWo_20F_A_C1 condition
+- German number words / 20 fonts atypical / parity number sets alternating, abbreviated in file name as NumWo_20F_A_Par condition
+
+Each condition is administered in sequences of 64 seconds of visual presentation (2 seconds of stimulus fade-in (stimulus gradually increases contrast from 0 to full) + 60 seconds of stimulus at full contrast + 2 seconds of stimulus fade-out (gradual decrease of contrast from 100 to 0)), with 2 sequences per condition. 
+We only analyze data during the 60 seconds at full contrast. 
+
+The data in the folder is not raw data and it has already been preprocessed up to segmentation of the data by condition. 
+Filenames reflect the processing stages that have been applied to each file, from right to left:
+- "chanlabels"/"chansel"/"chanlocs" steps are for renaming channels to fit the 68 channels template and for attributing coordinates to channels for plotting response topographies
+- "but" step applies a Butterworth band pass filter for 0.1 to 80 Hz (filter order 4) 
+- "ep1" step is a first segmentation step where we select only parts of the signal corresponding to sequences of interest, i.e., we keep signal from -1 before the start trigger (tells when the first stimulus is presented and indicates which condition is administered) and for a duration of 65 seconds; at this stage, all sequences are stored into one file (not separated by condition)
+- "ica" step means we ran an independent component analysis(ICA) on the data: this is for finding a component reflecting eye blinks and removing it from data if there are too many of them
+- "icfilt" step means the dataset needed an ICA and it was applied, i.e., the component reflecting eye blinks was removed from the data (not all participants needed ICA)
+- "fix" followed by a channel name means this electrode was interpolated due to noisy signal; interpolation is performed with 3 neighboring channels
+- "rr" step means data was re-referenced to the average of all EEG channels
+- "epbin" followed by abbreviation of condition and its corresponding trigger number means that data was further segmented to include only the exact number of bins we are interested in. This number of bins is calculated using the frequency of interest (3.75Hz), the sampling rate (512) and the sequence duration at full contrast (60). 
+
+Each epbin datafile thus includes the EEG data 2 sequences of one condition, for 60 seconds and 68 recording channels. 
+
