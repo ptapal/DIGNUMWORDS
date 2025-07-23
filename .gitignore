@@ -1,3 +1,6 @@
 NAMES.txt
 mat_files.txt
 mat_load.ipynb
+data/
+*.pyc
+__pycache__/
