@@ -4,3 +4,4 @@ mat_load.ipynb
 data/
 *.pyc
 __pycache__/
+h5_sep/
