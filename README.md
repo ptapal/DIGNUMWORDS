@@ -16,15 +16,29 @@ Filenames reflect the processing stages that have been applied to each file, fro
 ### Explanation of the files
 
 - `data/` directory stores all raw samples in csv format: time,channel,condition,value
-- `mat_files.txt` all mat files that were converted to csv
-- `NAMES.txt` all files including lw6
-- `mat_load.ipynb` notebook with the conversion script
+- `data/mat_files_cleaned.txt` all mat files that were converted to csv
 - `pr_fe.py` module with preprocessing and feature extraction
 - `environment.yml` lists all dependencies of env
 - `h5_load.ipynb` loads data in hdf5 format for hierarchal structure
-- `hierarch_gr/` stores files generated in `h5_load.ipynb`
+- `h5_sep/` stores files generated in `h5_load.ipynb`
+- `ML.ipynb` includes Machine Learning pipeline for all combinations
+- `modality_eval.py` and `load_data.py` are helper functions for Machine Learning pipeline
+
+### Goal
+
+Train a model on digit sequences and test it on number word sequences (and vice versa) to investigate to what extent digit and word representations are shared.
 
 ### Methodology
 
-- Train a model on digit sequences and test it on number word sequences (or vice versa) to investigate to what extent digit and word representations are shared.
-- Try first with parity, and then with control.
+1. Filter out mat files from the initial dataset and convert them to csv. Given its simplicity and lack of influence on the data content, the script is not included but is available upon request
+2. Use pre-processing (i.e. bandpass filtering and STFT) and feature extraction (i.e. GLCM and frequency bands) from module `pr_fe.py` to convert everything in hierarchal h5 format through `h5_load.ipynb`, separating conditions
+3. Do both cross-modality and within-modality predictions through `ML.ipynb`, employing XGBoost classifier. Jupyter notebook allows to interactively change parameters (e.g. parity or control) and helper functions such as `modality_eval.py` and `load_data.py`
+
+### Instructions
+
+1. Install dependencies from `environment.yml`
+```
+conda env create -f environment.yml
+conda activate env
+```
+2. Run notebooks
