@@ -10,32 +10,7 @@ from sklearn.metrics import (precision_recall_curve, average_precision_score,
                                 roc_auc_score)
 from sklearn.calibration import calibration_curve
 
-def evaluate_cross_modality(base_dir, subjects, train_modality, test_modality):
-    X_train, y_train, _ = load_modality_data(base_dir, subjects, train_modality)
-    X_test, y_test, _ = load_modality_data(base_dir, subjects, test_modality)
-    
-    if X_train.empty or X_test.empty:
-        print(f"Missing data for {train_modality}→{test_modality}")
-        return None
-    
-    model = Pipeline([
-        ('scaler', StandardScaler()),
-        ('clf', XGBClassifier(
-            objective='binary:logistic',
-            eval_metric='logloss',
-            max_depth=4,
-            learning_rate=0.1,
-            n_estimators=200,
-            base_score=0.5,
-            random_state=42
-        ))
-    ])
-    model.fit(X_train, y_train)
-    
-    y_pred = model.predict(X_test)
-    return classification_report(y_test, y_pred, target_names=['Even', 'Odd'])
-
-def enhanced_cross_modality(base_dir, subjects, train_mod, test_mod):
+def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod):
     X_train, y_train, _ = load_modality_data(base_dir, subjects, train_mod)
     X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod)
     
@@ -78,30 +53,6 @@ def enhanced_cross_modality(base_dir, subjects, train_mod, test_mod):
     return metrics
 
 def evaluate_within_modality(base_dir, subjects, modality):
-    X, y, _ = load_modality_data(base_dir, subjects, modality)
-    
-    if X.empty:
-        print(f"Missing data for {modality}")
-        return None
-    
-    model = Pipeline([
-        ('scaler', StandardScaler()),
-        ('clf', XGBClassifier(
-            objective='binary:logistic',
-            eval_metric='logloss',
-            max_depth=4,
-            learning_rate=0.1,
-            n_estimators=200,
-            base_score=0.5,
-            random_state=42
-        ))
-    ])
-    model.fit(X, y)
-    
-    y_pred = model.predict(X)
-    return classification_report(y, y_pred, target_names=['Even', 'Odd'])
-
-def enhanced_within_modality(base_dir, subjects, modality):
     X, y, _ = load_modality_data(base_dir, subjects, modality)
     
     if X.empty:
