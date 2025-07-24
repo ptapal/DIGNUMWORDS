@@ -9,6 +9,7 @@ from sklearn.metrics import (precision_recall_curve, average_precision_score,
                                 balanced_accuracy_score, matthews_corrcoef,
                                 roc_auc_score)
 from sklearn.calibration import calibration_curve
+import numpy as np
 
 def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod):
     X_train, y_train, _ = load_modality_data(base_dir, subjects, train_mod)
@@ -91,4 +92,48 @@ def evaluate_within_modality(base_dir, subjects, modality):
         'calibration': calibration_curve(y, y_proba, n_bins=10)
     })
     
+    return metrics
+
+def evaluate_mixed_modality(base_dir, subjects, test_mod):
+    X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig')
+    X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo')
+    
+    X_train = pd.concat([X_train_dig, X_train_words], axis=0)
+    y_train = pd.Series(np.concatenate([y_train_dig, y_train_words]), name='label')
+    
+    X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod)
+    
+    model = Pipeline([
+        ('scaler', StandardScaler()),
+        ('clf', XGBClassifier(random_state=42))
+    ])
+    model.fit(X_train, y_train)
+    
+    y_pred = model.predict(X_test)
+    y_proba = model.predict_proba(X_test)[:, 1]
+    
+    metrics = {
+        'accuracy': model.score(X_test, y_test),
+        'balanced_accuracy': balanced_accuracy_score(y_test, y_pred),
+        'roc_auc': roc_auc_score(y_test, y_proba),
+        'mcc': matthews_corrcoef(y_test, y_pred),
+        'confusion_matrix': confusion_matrix(y_test, y_pred),
+        'support': len(y_test)
+    }
+    
+    precision, recall, _ = precision_recall_curve(y_test, y_proba)
+    avg_precision = average_precision_score(y_test, y_proba)
+    fpr, tpr, _ = roc_curve(y_test, y_proba)
+    loss = log_loss(y_test, y_proba)
+    brier = brier_score_loss(y_test, y_proba)
+
+    metrics.update({
+        'precision_recall': (precision, recall),
+        'avg_precision': avg_precision,
+        'roc_curve': (fpr, tpr),
+        'log_loss': loss,
+        'brier_score': brier,
+        'calibration': calibration_curve(y_test, y_proba, n_bins=10)
+    })
+
     return metrics
