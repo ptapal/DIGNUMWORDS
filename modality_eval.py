@@ -18,6 +18,13 @@ def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod):
     if X_train.empty or X_test.empty:
         return None
     
+    if 'Electrode' in X_train.columns:
+        X_train = X_train.drop(columns=['Electrode'])
+    if 'Electrode' in X_test.columns:
+        X_test = X_test.drop(columns=['Electrode'])
+
+    feature_names = X_train.columns
+
     model = Pipeline([
         ('scaler', StandardScaler()),
         ('clf', XGBClassifier(random_state=42))
@@ -50,6 +57,16 @@ def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod):
         'brier_score': brier,
         'calibration': calibration_curve(y_test, y_proba, n_bins=10)
     })
+
+    clf = model.named_steps['clf']
+    importances = clf.feature_importances_
+    
+    feature_importance_df = pd.DataFrame({
+        'feature': feature_names,
+        'importance': importances
+    }).sort_values(by='importance', ascending=False)
+
+    metrics['feature_importances'] = feature_importance_df
     
     return metrics
 
@@ -59,6 +76,11 @@ def evaluate_within_modality(base_dir, subjects, modality):
     if X.empty:
         return None
     
+    if 'Electrode' in X.columns:
+        X = X.drop(columns=['Electrode'])
+
+    feature_names = X.columns
+
     model = Pipeline([
         ('scaler', StandardScaler()),
         ('clf', XGBClassifier(random_state=42))
@@ -91,6 +113,16 @@ def evaluate_within_modality(base_dir, subjects, modality):
         'brier_score': brier,
         'calibration': calibration_curve(y, y_proba, n_bins=10)
     })
+
+    clf = model.named_steps['clf']
+    importances = clf.feature_importances_
+    
+    feature_importance_df = pd.DataFrame({
+        'feature': feature_names,
+        'importance': importances
+    }).sort_values(by='importance', ascending=False)
+
+    metrics['feature_importances'] = feature_importance_df
     
     return metrics
 
@@ -100,8 +132,16 @@ def evaluate_mixed_modality(base_dir, subjects, test_mod):
     
     X_train = pd.concat([X_train_dig, X_train_words], axis=0)
     y_train = pd.Series(np.concatenate([y_train_dig, y_train_words]), name='label')
-    
+
     X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod)
+    
+    if 'Electrode' in X_train.columns:
+        X_train = X_train.drop(columns=['Electrode'])
+    if 'Electrode' in X_test.columns:
+        X_test = X_test.drop(columns=['Electrode'])
+
+    feature_names = X_train.columns
+
     
     model = Pipeline([
         ('scaler', StandardScaler()),
@@ -135,5 +175,15 @@ def evaluate_mixed_modality(base_dir, subjects, test_mod):
         'brier_score': brier,
         'calibration': calibration_curve(y_test, y_proba, n_bins=10)
     })
+
+    clf = model.named_steps['clf']
+    importances = clf.feature_importances_
+    
+    feature_importance_df = pd.DataFrame({
+        'feature': feature_names,
+        'importance': importances
+    }).sort_values(by='importance', ascending=False)
+
+    metrics['feature_importances'] = feature_importance_df
 
     return metrics
