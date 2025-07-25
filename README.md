@@ -22,7 +22,7 @@ Filenames reflect the processing stages that have been applied to each file, fro
 - `h5_load.ipynb` loads data in hdf5 format for hierarchal structure
 - `h5_sep/` stores files generated in `h5_load.ipynb`
 - `ML.ipynb` includes Machine Learning pipeline for all combinations
-- `modality_eval.py` and `load_data.py` are helper functions for Machine Learning pipeline
+- `modality_eval.py`, `diagnostics.py` and `load_data.py` are helper functions for Machine Learning pipeline
 
 ### Goal
 
@@ -30,9 +30,9 @@ Train a model on digit sequences and test it on number word sequences (and vice 
 
 ### Methodology
 
-1. Filter out mat files from the initial dataset and convert them to csv. Given its simplicity and lack of influence on the data content, the script is not included but is available upon request
+1. Filter out mat files from the initial dataset and convert them to csv
 2. Use pre-processing (i.e. bandpass filtering and STFT) and feature extraction (i.e. GLCM and frequency bands) from module `pr_fe.py` to convert everything in hierarchal h5 format through `h5_load.ipynb`, separating conditions
-3. Do both cross-modality and within-modality predictions through `ML.ipynb`, employing XGBoost classifier. Jupyter notebook allows to interactively change parameters (e.g. parity or control) and helper functions such as `modality_eval.py` and `load_data.py`
+3. Do cross-modality, within-modality and mixed-modality predictions through `ML.ipynb`, employing XGBoost classifier. Jupyter notebook allows to interactively change parameters (e.g. parity or control) and helper functions such as `modality_eval.py`, `diagnostics.py` and `load_data.py`
 
 ### Instructions
 
