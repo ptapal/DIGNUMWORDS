@@ -23,6 +23,8 @@ Filenames reflect the processing stages that have been applied to each file, fro
 - `h5_sep/` stores files generated in `h5_load.ipynb`
 - `ML.ipynb` includes Machine Learning pipeline for all combinations
 - `modality_eval.py`, `diagnostics.py` and `load_data.py` are helper functions for Machine Learning pipeline
+- `electrodes_eval.py` is a function which evalutes impact of electrodes/cerebral regions and draw a topomap
+- `electrodes.py` contains all constants needed for electodes and their topomaps
 
 ### Goal
 

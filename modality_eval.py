@@ -11,10 +11,10 @@ from sklearn.metrics import (precision_recall_curve, average_precision_score,
 from sklearn.calibration import calibration_curve
 import numpy as np
 
-def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod):
-    X_train, y_train, _ = load_modality_data(base_dir, subjects, train_mod)
-    X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod)
-    
+def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod, font, condition):
+    X_train, y_train, _ = load_modality_data(base_dir, subjects, train_mod, font, condition)
+    X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font, condition)
+
     if X_train.empty or X_test.empty:
         return None
     
@@ -70,9 +70,9 @@ def evaluate_cross_modality(base_dir, subjects, train_mod, test_mod):
     
     return metrics
 
-def evaluate_within_modality(base_dir, subjects, modality):
-    X, y, _ = load_modality_data(base_dir, subjects, modality)
-    
+def evaluate_within_modality(base_dir, subjects, modality, font, condition):
+    X, y, _ = load_modality_data(base_dir, subjects, modality, font, condition)
+
     if X.empty:
         return None
     
@@ -126,15 +126,15 @@ def evaluate_within_modality(base_dir, subjects, modality):
     
     return metrics
 
-def evaluate_mixed_modality(base_dir, subjects, test_mod):
-    X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig')
-    X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo')
-    
+def evaluate_mixed_modality(base_dir, subjects, test_mod, font, condition):
+    X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font, condition)
+    X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo', font, condition)
+
     X_train = pd.concat([X_train_dig, X_train_words], axis=0)
     y_train = pd.Series(np.concatenate([y_train_dig, y_train_words]), name='label')
 
-    X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod)
-    
+    X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font, condition)
+
     if 'Electrode' in X_train.columns:
         X_train = X_train.drop(columns=['Electrode'])
     if 'Electrode' in X_test.columns:
