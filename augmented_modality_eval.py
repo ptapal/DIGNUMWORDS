@@ -9,29 +9,44 @@ import numpy as np
 import pandas as pd
 from load_data import load_modality_data
 
-def evaluate_modality(base_dir, subjects, modality, font, condition, mode='within', test_mod=None):
+def aug_evaluate_modality(base_dir, subjects, modality, 
+                     font_train, font_test=None, 
+                     condition_train=None, condition_test=None,
+                     mode='within', test_mod=None):
     """
+    Unified evaluation function for cross-font/condition/modality analysis
+    
     Parameters:
-    - mode: 'cross' (cross-modality), 'within' (within-modality), or 'mixed' (mixed-modality)
-    - test_mod: Required for 'cross' and 'mixed' modes, specifies the test modality
+    - mode: 'cross', 'within', or 'mixed'
+    - test_mod: Required for 'cross'/'mixed' modes (test modality)
+    - font_train/font_test: Specify different fonts for train/test
+    - condition_train/condition_test: Specify different conditions for train/test
     """
     
+    font_test = font_test if font_test is not None else font_train
+    condition_test = condition_test if condition_test is not None else condition_train
+    condition_train = condition_train if condition_train is not None else condition_test  
+
     if mode == 'cross':
         if not test_mod:
             raise ValueError("test_mod must be specified for cross-modality evaluation")
-        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font, condition)
-        X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font, condition)
+        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font_train, condition_train)
+        X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font_test, condition_test)
     elif mode == 'within':
-        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font, condition)
-        X_test, y_test = X_train.copy(), y_train.copy()
+        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font_train, condition_train)
+        if font_train == font_test and condition_train == condition_test:
+            X_test, y_test = X_train.copy(), y_train.copy()
+        else:
+            X_test, y_test, _ = load_modality_data(base_dir, subjects, modality, font_test, condition_test)
     elif mode == 'mixed':
         if not test_mod:
             raise ValueError("test_mod must be specified for mixed-modality evaluation")
-        X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font, condition)
-        X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo', font, condition)
+        X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font_train, condition_train)
+        X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo', font_train, condition_train)
         X_train = pd.concat([X_train_dig, X_train_words], axis=0)
         y_train = pd.Series(np.concatenate([y_train_dig, y_train_words]), name='label')
-        X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font, condition)
+
+        X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font_test, condition_test)
     else:
         raise ValueError("Invalid mode. Choose 'cross', 'within', or 'mixed'")
 
@@ -62,7 +77,11 @@ def evaluate_modality(base_dir, subjects, modality, font, condition, mode='withi
         'support': len(y_test),
         'mode': mode,
         'train_modality': modality,
-        'test_modality': test_mod if mode in ['cross', 'mixed'] else modality
+        'test_modality': test_mod if mode in ['cross', 'mixed'] else modality,
+        'train_font': font_train,
+        'test_font': font_test,
+        'train_condition': condition_train,
+        'test_condition': condition_test
     }
     
     precision, recall, _ = precision_recall_curve(y_test, y_proba)
