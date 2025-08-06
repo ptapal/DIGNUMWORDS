@@ -36,10 +36,7 @@ import pandas as pd
 import numpy as np
 from electrodes import biosemi_68_order
 
-# Make sure this is defined before calling the function
-# biosemi_68 = [...]  # List of 68 electrode names
-
-def load_modality_data(base_dir, subjects, modality, font, condition):
+def load_modality_data(base_dir, subjects, modality, font, condition, print_head=False):
     X, y, subj_ids = [], [], []
     
     for subject in subjects:
@@ -59,13 +56,11 @@ def load_modality_data(base_dir, subjects, modality, font, condition):
 
                             df = pd.DataFrame(data, columns=columns)
 
-                            # 🔁 Electrode column replacement
                             if 'Electrode' in df.columns:
                                 if len(df) == len(biosemi_68_order):
                                     df['Electrode'] = biosemi_68_order
                                 else:
-                                    print(f"Warning: Electrode column has {len(df)} rows, but biosemi_68 has {len(biosemi_68_order)}.")
-                                    df['Electrode'] = biosemi_68_order[:len(df)]  # Truncate if needed
+                                    df['Electrode'] = biosemi_68_order[:len(df)]  
 
                             X.append(df)
                             y.extend([label] * len(data))
@@ -74,4 +69,8 @@ def load_modality_data(base_dir, subjects, modality, font, condition):
     if not X: 
         return pd.DataFrame(), np.array([]), np.array([])
     
-    return pd.concat(X), np.array(y), np.array(subj_ids)
+    X_combined = pd.concat(X)
+    y_combined = np.array(y)
+    subj_ids_combined = np.array(subj_ids)
+    
+    return X_combined, y_combined, subj_ids_combined
