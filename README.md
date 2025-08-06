@@ -23,8 +23,10 @@ Filenames reflect the processing stages that have been applied to each file, fro
 - `h5_sep/` stores files generated in `h5_load.ipynb`
 - `ML.ipynb` includes Machine Learning pipeline for all combinations
 - `modality_eval.py`, `diagnostics.py` and `load_data.py` are helper functions for Machine Learning pipeline
+- `augmented_modality_eval.py` is a helper function for in-depth cross-modality investigation
 - `electrodes_eval.py` is a function which evalutes impact of electrodes/cerebral regions and draw a topomap
 - `electrodes.py` contains all constants needed for electodes and their topomaps
+- `el_reference.py` is the script which draws a topomap with referenced labels
 
 ### Goal
 
@@ -35,6 +37,7 @@ Train a model on digit sequences and test it on number word sequences (and vice 
 1. Filter out mat files from the initial dataset and convert them to csv
 2. Use pre-processing (i.e. STFT) and feature extraction (i.e. GLCM and frequency bands) from module `pr_fe.py` to convert everything in hierarchal h5 format through `h5_load.ipynb`, separating conditions
 3. Do cross-modality, within-modality and mixed-modality predictions through `ML.ipynb`, employing XGBoost classifier. Jupyter notebook allows to interactively change parameters (e.g. parity or control) and helper functions such as `modality_eval.py`, `diagnostics.py` and `load_data.py`
+4. Do analogous think with augmented analysis (using `augmented_modality_eval.py`)
 
 ### Instructions
 
