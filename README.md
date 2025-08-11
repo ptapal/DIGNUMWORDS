@@ -30,14 +30,14 @@ Filenames reflect the processing stages that have been applied to each file, fro
 
 ### Goal
 
-Train a model on digit sequences and test it on number word sequences (and vice versa) to investigate to what extent digit and word representations are shared.
+Train a model on digit sequences and test it on number word sequences (and vice versa) across different modalities in order to investigate to what extent digit and word representations are shared.
 
 ### Methodology
 
 1. Filter out mat files from the initial dataset and convert them to csv
 2. Use pre-processing (i.e. STFT) and feature extraction (i.e. GLCM and frequency bands) from module `pr_fe.py` to convert everything in hierarchal h5 format through `h5_load.ipynb`, separating conditions
 3. Do cross-modality, within-modality and mixed-modality predictions through `ML.ipynb`, employing XGBoost classifier. Jupyter notebook allows to interactively change parameters (e.g. parity or control) and helper functions such as `modality_eval.py`, `diagnostics.py` and `load_data.py`
-4. Do analogous think with augmented analysis (using `augmented_modality_eval.py`)
+4. Do analogous thing with augmented analysis (using `augmented_modality_eval.py`)
 
 ### Instructions
 
@@ -46,4 +46,4 @@ Train a model on digit sequences and test it on number word sequences (and vice 
 conda env create -f environment.yml
 conda activate env
 ```
-2. Run notebooks
+2. Run notebooks in the following order: `mat_load.ipynb` → `h5_load.ipynb` → `ML.ipynb`
