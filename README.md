@@ -15,7 +15,8 @@ Filenames reflect the processing stages that have been applied to each file, fro
 
 ### Explanation of the files
 
-- `data/` directory stores all raw samples in csv format: time,channel,condition,value
+- `data/` directory stores all raw samples in csv format without bin separation without explicit odd/even detection: time,channel,condition,value
+- `csv_data/` directory stores all raw samples in csv format with proper bin separation with explicit odd/even detection: sequence, bin, label, channel, time_in_bin, value
 - `data/mat_files_cleaned.txt` all mat files that were converted to csv
 - `pr_fe.py` module with preprocessing and feature extraction
 - `environment.yml` lists all dependencies of env

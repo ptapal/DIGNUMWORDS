@@ -6,3 +6,6 @@ data/
 __pycache__/
 h5_sep/
 results/
+epbin-data_DIGNUMWORDS-SHAPE/
+csv_data/
+h5_freq/

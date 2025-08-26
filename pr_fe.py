@@ -38,6 +38,8 @@ class FeatureExtractor:
         }
     
     # frequency band analysis
+    '''
+    # for basic csv structure
     def compute_frequency_features(self, signal, n_fft=256):
         psds, freqs = mne.time_frequency.psd_array_welch(signal.get_data(), signal.info['sfreq'], fmin= 1, fmax=80, n_fft=n_fft)
 
@@ -53,6 +55,40 @@ class FeatureExtractor:
         for band, (low, high) in bands.items():
             band_idx = np.logical_and(freqs >= low, freqs <= high)
             band_power = np.mean(psds[:, band_idx], axis=1)  
+            features[band] = band_power
+
+        frequency_df = pd.DataFrame(features)
+        frequency_df['Electrode'] = signal.info['ch_names']
+
+
+        return frequency_df
+
+      ''' 
+    def compute_frequency_features(self, signal, n_fft=None):
+        n_times = signal.n_times
+        if n_fft is None or n_fft > n_times:
+            n_fft = n_times  # avoid error if bin is smaller than default n_fft
+
+        psds, freqs = mne.time_frequency.psd_array_welch(
+            signal.get_data(),
+            sfreq=signal.info['sfreq'],
+            fmin=1,
+            fmax=80,
+            n_fft=n_fft
+        )
+
+        bands = {
+            'delta': (1, 4),
+            'theta': (4, 8),
+            'alpha': (8, 13),
+            'beta':  (13, 30),
+            'gamma': (30, 80)
+        }
+
+        features = {}
+        for band, (low, high) in bands.items():
+            band_idx = np.logical_and(freqs >= low, freqs <= high)
+            band_power = np.mean(psds[:, band_idx], axis=1)  # average across freq bins
             features[band] = band_power
 
         frequency_df = pd.DataFrame(features)
