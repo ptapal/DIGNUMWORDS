@@ -1,87 +1,122 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
-from sklearn.metrics import (confusion_matrix, balanced_accuracy_score, 
-                            matthews_corrcoef, roc_auc_score, precision_recall_curve,
-                            average_precision_score, roc_curve, log_loss, brier_score_loss)
-from sklearn.calibration import calibration_curve
-import numpy as np
-import pandas as pd
+from sklearn.metrics import (
+    balanced_accuracy_score, roc_auc_score,
+    confusion_matrix, matthews_corrcoef
+)
+from sklearn.model_selection import train_test_split
 from load_data import load_modality_data
 
-def evaluate_modality(base_dir, subjects, modality, font, condition, mode='within', test_mod=None):
+def evaluate_modality(base_dir, subjects, modality, font, condition,
+                      mode='within', test_mod=None, plot_time_resolved=True,
+                      test_size=0.2, random_state=42):
     """
-    Parameters:
-    - mode: 'cross' (cross-modality), 'within' (within-modality), or 'mixed' (mixed-modality)
-    - test_mod: Required for 'cross' and 'mixed' modes, specifies the test modality
+    Evaluate EEG modality data with XGBoost, supporting within, cross, and mixed modality training/testing.
     """
-    
-    if mode == 'cross':
-        if not test_mod:
-            raise ValueError("test_mod must be specified for cross-modality evaluation")
-        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font, condition)
-        X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font, condition)
-    elif mode == 'within':
-        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font, condition)
-        X_test, y_test = X_train.copy(), y_train.copy()
+
+    # --- Load data depending on mode ---
+    if mode == 'within':
+        X, y, subj = load_modality_data(base_dir, subjects, modality, font, condition)
+        if X.empty:
+            print("No data found for training.")
+            return None
+        # Proper 80/20 split
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, stratify=y, random_state=random_state
+        )
+    elif mode == 'cross':
+        X_train, y_train, subj_train = load_modality_data(base_dir, subjects, modality, font, condition)
+        X_test, y_test, subj_test = load_modality_data(base_dir, subjects, test_mod, font, condition)
+        if X_train.empty or X_test.empty:
+            print("No data found for cross modality.")
+            return None
     elif mode == 'mixed':
-        if not test_mod:
-            raise ValueError("test_mod must be specified for mixed-modality evaluation")
-        X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font, condition)
-        X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo', font, condition)
-        X_train = pd.concat([X_train_dig, X_train_words], axis=0)
-        y_train = pd.Series(np.concatenate([y_train_dig, y_train_words]), name='label')
-        X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font, condition)
+        X_dig, y_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font, condition)
+        X_num, y_num, _ = load_modality_data(base_dir, subjects, 'NumWo', font, condition)
+        X_all = pd.concat([X_dig, X_num], axis=0)
+        y_all = np.concatenate([y_dig, y_num])
+        # Split training set 80/20
+        X_train, _, y_train, _ = train_test_split(
+            X_all, y_all, test_size=test_size, stratify=y_all, random_state=random_state
+        )
+        X_test, y_test, subj_test = load_modality_data(base_dir, subjects, test_mod, font, condition)
+        if X_test.empty:
+            print("No test data found for mixed modality.")
+            return None
     else:
-        raise ValueError("Invalid mode. Choose 'cross', 'within', or 'mixed'")
+        raise ValueError("Invalid mode")
 
-    if X_train.empty or X_test.empty:
-        return None
+    # --- Prepare features ---
+    metadata_cols = ['bin', 'sequence', 'subject']
+    feature_cols = X_train.select_dtypes(include=np.number).columns.difference(metadata_cols)
+    X_train_num = X_train[feature_cols].copy()
+    X_test_num = X_test[feature_cols].copy()
+    X_train_num.columns = X_train_num.columns.astype(str)
+    X_test_num.columns = X_test_num.columns.astype(str)
 
-    for df in [X_train, X_test]:
-        if 'Electrode' in df.columns:
-            df.drop(columns=['Electrode'], inplace=True)
-
-    feature_names = X_train.columns
-
+    # --- Train model ---
     model = Pipeline([
         ('scaler', StandardScaler()),
-        ('clf', XGBClassifier(random_state=42))
+        ('clf', XGBClassifier(random_state=random_state, n_jobs=-1))
     ])
-    model.fit(X_train, y_train)
-    
-    y_pred = model.predict(X_test)
-    y_proba = model.predict_proba(X_test)[:, 1]
-    
+    model.fit(X_train_num, y_train)
+
+    # --- Predictions ---
+    y_pred = model.predict(X_test_num)
+    y_proba = model.predict_proba(X_test_num)[:, 1]
+
+    # --- Metrics ---
+    feature_importance_df = pd.DataFrame({
+        'feature': feature_cols,
+        'importance': model.named_steps['clf'].feature_importances_
+    }).sort_values(by='importance', ascending=False)
+
     metrics = {
-        'accuracy': model.score(X_test, y_test),
+        'accuracy': model.score(X_test_num, y_test),
         'balanced_accuracy': balanced_accuracy_score(y_test, y_pred),
         'roc_auc': roc_auc_score(y_test, y_proba),
         'mcc': matthews_corrcoef(y_test, y_pred),
         'confusion_matrix': confusion_matrix(y_test, y_pred),
-        'support': len(y_test),
-        'mode': mode,
         'train_modality': modality,
-        'test_modality': test_mod if mode in ['cross', 'mixed'] else modality
+        'test_modality': test_mod if mode in ['cross', 'mixed'] else modality,
+        'feature_importances': feature_importance_df
     }
-    
-    precision, recall, _ = precision_recall_curve(y_test, y_proba)
-    fpr, tpr, _ = roc_curve(y_test, y_proba)
-    
-    metrics.update({
-        'precision_recall': (precision, recall),
-        'avg_precision': average_precision_score(y_test, y_proba),
-        'roc_curve': (fpr, tpr),
-        'log_loss': log_loss(y_test, y_proba),
-        'brier_score': brier_score_loss(y_test, y_proba),
-        'calibration': calibration_curve(y_test, y_proba, n_bins=10)
-    })
 
+    # --- Time-resolved (per-bin) ---
+    if plot_time_resolved and 'bin' in X_test.columns:
+        bins = np.sort(X_test['bin'].unique())
+        bin_acc = []
+        for b in bins:
+            idx = X_test['bin'] == b
+            if idx.sum() == 0:
+                continue
+            X_bin = X_test_num.loc[idx]
+            y_bin = y_test[idx]
+            y_bin_pred = model.predict(X_bin)
+            acc = (y_bin_pred == y_bin).mean()
+            bin_acc.append((b, acc))
+        bin_acc = np.array(bin_acc)
+        plt.figure(figsize=(12, 4))
+        plt.plot(bin_acc[:, 0], bin_acc[:, 1], marker='o')
+        plt.xlabel('Bin')
+        plt.ylabel('Accuracy')
+        plt.title(f'Time-resolved accuracy ({mode})')
+        plt.grid(True)
+        plt.show()
+        metrics['time_resolved'] = bin_acc
+
+    # Feature importances as DataFrame
     clf = model.named_steps['clf']
+    feature_names = list(feature_cols)
     feature_importance_df = pd.DataFrame({
         'feature': feature_names,
         'importance': clf.feature_importances_
     }).sort_values(by='importance', ascending=False)
+
     metrics['feature_importances'] = feature_importance_df
-    
+
     return metrics
