@@ -2,15 +2,22 @@ import os
 import h5py
 import pandas as pd
 import numpy as np
-
 from electrodes import biosemi_68_order
 
 def load_modality_data(base_dir, subjects, modality, font=None, condition=None):
+    """
+    Load EEG data from HDF5, filtered by modality, font, and condition.
+    Supports nested fonts like '20F/A'.
+    Labels are assigned as odd=1, even=0.
+    """
     X, y, subj_ids = [], [], []
 
     h5_path = os.path.join(base_dir, 'features_per_bin.h5')
     if not os.path.exists(h5_path):
         return pd.DataFrame(), np.array([]), np.array([])
+
+    # Split font into main font and optional subfont
+    main_font, sub_font = (font.split('/') + [None])[:2] if font else (None, None)
 
     with h5py.File(h5_path, 'r') as f:
         for subject in subjects:
@@ -19,59 +26,69 @@ def load_modality_data(base_dir, subjects, modality, font=None, condition=None):
                 continue
             subj_grp = f[subject_group]
 
-            for category in subj_grp.keys():
-                cat_grp = subj_grp[category]
-                for font_type in cat_grp.keys():
-                    font_grp = cat_grp[font_type]
+            # --- filter modality ---
+            if modality not in subj_grp:
+                continue
+            cat_grp = subj_grp[modality]
 
-                    font_keys = [k for k in font_grp.keys() if k not in ['Par', 'Control']]
-                    if font_keys:
-                        font_iter = font_keys
-                    else:
-                        font_iter = [None]
+            # --- filter main font ---
+            for font_type in cat_grp.keys():
+                if main_font is not None and font_type != main_font:
+                    continue
+                font_grp = cat_grp[font_type]
 
-                    for sf in font_iter:
-                        sf_grp = font_grp[sf] if sf else font_grp
+                # --- filter subfont ---
+                if sub_font is not None:
+                    if sub_font not in font_grp:
+                        continue
+                    sf_grp = font_grp[sub_font]
+                else:
+                    sf_grp = font_grp
 
-                        for cond_group_name in ['Par', 'Control']:
-                            if cond_group_name not in sf_grp:
+                # --- filter condition ---
+                for cond_group_name in ['Par', 'Control']:
+                    if condition is not None and cond_group_name != condition:
+                        continue
+                    if cond_group_name not in sf_grp:
+                        continue
+                    cond_grp = sf_grp[cond_group_name]
+
+                    # --- loop sequences ---
+                    for seq_name in cond_grp.keys():
+                        seq_idx = int(seq_name.replace('sequence_', ''))
+                        seq_grp = cond_grp[seq_name]
+
+                        # --- loop bins ---
+                        for bin_name in seq_grp.keys():
+                            bin_idx = int(bin_name.split('_')[0].replace('bin',''))
+                            dset = seq_grp[bin_name]
+                            data = dset[:]
+
+                            # label odd=1, even=0
+                            if 'odd' in bin_name.lower():
+                                label_val = 1
+                            elif 'even' in bin_name.lower():
+                                label_val = 0
+                            else:
                                 continue
-                            cond_grp = sf_grp[cond_group_name]
 
-                            for seq_name in cond_grp.keys():
-                                seq_idx = int(seq_name.replace('sequence_', ''))
-                                seq_grp = cond_grp[seq_name]
+                            n_electrodes = len(biosemi_68_order)
+                            n_features = data.size // n_electrodes
+                            df = pd.DataFrame(
+                                data.reshape(n_electrodes, n_features),
+                                index=biosemi_68_order
+                            )
+                            df['bin'] = bin_idx
+                            df['sequence'] = seq_idx
+                            df['subject'] = subject
+                            df['category'] = modality
+                            df['font_type'] = font_type
+                            if sub_font:
+                                df['specific_font'] = sub_font
 
-                                for bin_name in seq_grp.keys():
-                                    bin_idx = int(bin_name.split('_')[0].replace('bin',''))
-                                    dset = seq_grp[bin_name]
-                                    data = dset[:]
-
-                                    # NEW: label odd=1, even=0 from bin_name
-                                    if 'odd' in bin_name.lower():
-                                        label_val = 1
-                                    elif 'even' in bin_name.lower():
-                                        label_val = 0
-                                    else:
-                                        continue
-
-                                    n_electrodes = len(biosemi_68_order)
-                                    n_features = data.size // n_electrodes
-                                    df = pd.DataFrame(
-                                        data.reshape(n_electrodes, n_features),
-                                        index=biosemi_68_order
-                                    )
-                                    df['bin'] = bin_idx
-                                    df['sequence'] = seq_idx
-                                    df['subject'] = subject
-                                    df['category'] = category
-                                    df['font_type'] = font_type
-                                    if sf:
-                                        df['specific_font'] = sf
-
-                                    X.append(df)
-                                    y.extend([label_val] * n_electrodes)
-                                    subj_ids.extend([subject] * n_electrodes)
+                            X.append(df)
+                            y.extend([label_val] * n_electrodes)
+                            subj_ids.extend([subject] * n_electrodes)
 
     if not X:
         return pd.DataFrame(), np.array([]), np.array([])

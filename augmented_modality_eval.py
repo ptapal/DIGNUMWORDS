@@ -5,6 +5,7 @@ from sklearn.metrics import (confusion_matrix, balanced_accuracy_score,
                             matthews_corrcoef, roc_auc_score, precision_recall_curve,
                             average_precision_score, roc_curve, log_loss, brier_score_loss)
 from sklearn.calibration import calibration_curve
+from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 from load_data import load_modality_data
@@ -36,23 +37,29 @@ def aug_evaluate_modality(base_dir, subjects, modality,
         X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font_train, condition_train)
         X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font_test, condition_test)
     elif mode == 'within':
-        X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font_train, condition_train)
+        X, y, _ = load_modality_data(base_dir, subjects, modality, font_train, condition_train)
         if font_train == font_test and condition_train == condition_test:
-            X_test, y_test = X_train.copy(), y_train.copy()
+            X_test, y_test = X.copy(), y.copy()
         else:
             X_test, y_test, _ = load_modality_data(base_dir, subjects, modality, font_test, condition_test)
-        from sklearn.model_selection import train_test_split
         X_train, X_test, y_train, y_test = train_test_split(
-            X_train, y_train, test_size=test_size, stratify=y_train, random_state=random_state
+            X, y, test_size=test_size, stratify=y, random_state=random_state
         )
     elif mode == 'mixed':
         if not test_mod:
             raise ValueError("test_mod must be specified for mixed-modality evaluation")
-        X_train_dig, y_train_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font_train, condition_train)
-        X_train_words, y_train_words, _ = load_modality_data(base_dir, subjects, 'NumWo', font_train, condition_train)
-        X_train = pd.concat([X_train_dig, X_train_words], axis=0)
-        y_train = np.concatenate([y_train_dig, y_train_words])
+        X_dig, y_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font_train, condition_train)
+        X_num, y_num, _ = load_modality_data(base_dir, subjects, 'NumWo', font_train, condition_train)
+
+        X_all = pd.concat([X_dig, X_num], axis=0)
+        y_all = np.concatenate([y_dig, y_num])
+
+        X_train, _, y_train, _ = train_test_split(
+            X_all, y_all, test_size=test_size, stratify=y_all, random_state=random_state
+        )
+
         X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font_test, condition_test)
+        
     else:
         raise ValueError("Invalid mode. Choose 'cross', 'within', or 'mixed'")
 

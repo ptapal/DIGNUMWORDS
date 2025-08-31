@@ -14,17 +14,12 @@ from load_data import load_modality_data
 def evaluate_modality(base_dir, subjects, modality, font, condition,
                       mode='within', test_mod=None, plot_time_resolved=True,
                       test_size=0.2, random_state=42):
-    """
-    Evaluate EEG modality data with XGBoost, supporting within, cross, and mixed modality training/testing.
-    """
 
-    # --- Load data depending on mode ---
     if mode == 'within':
         X, y, subj = load_modality_data(base_dir, subjects, modality, font, condition)
         if X.empty:
             print("No data found for training.")
             return None
-        # Proper 80/20 split
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=test_size, stratify=y, random_state=random_state
         )
@@ -39,7 +34,6 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
         X_num, y_num, _ = load_modality_data(base_dir, subjects, 'NumWo', font, condition)
         X_all = pd.concat([X_dig, X_num], axis=0)
         y_all = np.concatenate([y_dig, y_num])
-        # Split training set 80/20
         X_train, _, y_train, _ = train_test_split(
             X_all, y_all, test_size=test_size, stratify=y_all, random_state=random_state
         )
@@ -50,7 +44,6 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
     else:
         raise ValueError("Invalid mode")
 
-    # --- Prepare features ---
     metadata_cols = ['bin', 'sequence', 'subject']
     feature_cols = X_train.select_dtypes(include=np.number).columns.difference(metadata_cols)
     X_train_num = X_train[feature_cols].copy()
@@ -58,18 +51,15 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
     X_train_num.columns = X_train_num.columns.astype(str)
     X_test_num.columns = X_test_num.columns.astype(str)
 
-    # --- Train model ---
     model = Pipeline([
         ('scaler', StandardScaler()),
         ('clf', XGBClassifier(random_state=random_state, n_jobs=-1))
     ])
     model.fit(X_train_num, y_train)
 
-    # --- Predictions ---
     y_pred = model.predict(X_test_num)
     y_proba = model.predict_proba(X_test_num)[:, 1]
 
-    # --- Metrics ---
     feature_importance_df = pd.DataFrame({
         'feature': feature_cols,
         'importance': model.named_steps['clf'].feature_importances_
@@ -86,7 +76,6 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
         'feature_importances': feature_importance_df
     }
 
-    # --- Time-resolved (per-bin) ---
     if plot_time_resolved and 'bin' in X_test.columns:
         bins = np.sort(X_test['bin'].unique())
         bin_acc = []
@@ -109,7 +98,6 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
         plt.show()
         metrics['time_resolved'] = bin_acc
 
-    # Feature importances as DataFrame
     clf = model.named_steps['clf']
     feature_names = list(feature_cols)
     feature_importance_df = pd.DataFrame({
