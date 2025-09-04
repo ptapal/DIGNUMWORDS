@@ -117,7 +117,6 @@ def analyze_electrodes(
     if font_test is None:
         font_test = font_train
 
-    # --- Load training data ---
     if mode == 'mixed':
         X_train_dig, y_train_dig = load_modality_data_new(base_dir, subjects, 'Dig', font_train, condition_train)
         X_train_num, y_train_num = load_modality_data_new(base_dir, subjects, 'NumWo', font_train, condition_train)
@@ -130,9 +129,7 @@ def analyze_electrodes(
         print("No training data found!")
         return None
 
-    # --- Load test data ---
     if mode == 'within' and train_mod == test_mod and font_train == font_test and condition_train == condition_test:
-        # sample 80/20 split
         from sklearn.model_selection import train_test_split
         X_train, X_test, y_train, y_test = train_test_split(
             X_train, y_train, test_size=0.2, stratify=y_train, random_state=random_state
@@ -143,17 +140,15 @@ def analyze_electrodes(
             print("No test data found!")
             return None
 
-    # --- Electrode-wise evaluation ---
     montage = get_biosemi68_mne_montage()
-    ch_pos_dict = montage.get_positions()['ch_pos']  # dict: channel -> 3D pos
+    ch_pos_dict = montage.get_positions()['ch_pos'] 
     ch_names = list(ch_pos_dict.keys())
-    pos = np.array([ch_pos_dict[ch][:2] for ch in ch_names])  # take x,y only
+    pos = np.array([ch_pos_dict[ch][:2] for ch in ch_names])
 
-    # Pivot all electrodes once
     X_train_pivot = (
         X_train
         .groupby(['subject','sequence','bin','trial','Electrode'])['value']
-        .mean()               # or .first() if you prefer
+        .mean()               
         .unstack('Electrode')
         .fillna(0)
     )
@@ -166,7 +161,6 @@ def analyze_electrodes(
         .fillna(0)
     )
 
-    # Labels matching pivot index
     y_train_pivot = X_train.drop_duplicates(subset=['subject','sequence','bin','trial']).set_index(
         ['subject','sequence','bin','trial']
     )['label'].loc[X_train_pivot.index]
@@ -179,7 +173,6 @@ def analyze_electrodes(
     region_scores = {region: [] for region in region_map.keys()}
 
     for electrode in X_train['Electrode'].unique():
-        # Apply drop/keep strategy
         if strategy == 'drop':
             X_train_filt = X_train_pivot.drop(columns=[electrode])
             X_test_filt  = X_test_pivot.drop(columns=[electrode])
@@ -190,7 +183,6 @@ def analyze_electrodes(
         if len(X_train_filt) == 0 or len(X_test_filt) == 0:
             continue
 
-        # Fit model with correctly aligned labels
         model = Pipeline([
             ('scaler', StandardScaler()),
             ('clf', XGBClassifier(random_state=random_state))
@@ -206,24 +198,19 @@ def analyze_electrodes(
 
     region_importance = {k: np.mean(v) if v else 0 for k, v in region_scores.items()}
 
-    # --- Topomap ---
-    ## Only keep electrodes that exist in your dataset
     ch_names = [ch for ch in ch_names if ch in electrode_importance]
     pos = np.array([ch_pos_dict[ch][:2] for ch in ch_names])
     data = np.array([electrode_importance[ch] for ch in ch_names])
-    pos_filtered = pos  # keep same name for plot_topomap
+    pos_filtered = pos  
 
     fig, ax = plt.subplots(figsize=(8,8))
-    # This gives more space for the head
-    ax_head = fig.add_axes([0.25, 0.25, 0.4, 0.6]) # left, bottom, width, height
+    ax_head = fig.add_axes([0.25, 0.25, 0.4, 0.6]) 
 
-    # Compute center around 0.5 for subtle differences
     center = 0.5
     data_range = max(abs(data - center))
-    vmin = max(0, center - data_range * 1.5)  # exaggerate differences
+    vmin = max(0, center - data_range * 1.5) 
     vmax = min(1, center + data_range * 1.5)
 
-    # Optional: choose colormap based on mean
     cmap = 'RdBu_r' if np.mean(data) < 0.55 else 'viridis'
 
     im = plot_topomap(
@@ -251,7 +238,6 @@ def analyze_electrodes(
     plt.savefig(os.path.join(new_dir, 'electrode_importance.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
-    # --- Save CSV ---
     electrode_df = pd.DataFrame.from_dict(electrode_importance, orient='index', columns=['balanced_accuracy'])
     region_df = pd.DataFrame.from_dict(region_importance, orient='index', columns=['balanced_accuracy'])
     electrode_df.to_csv(os.path.join(new_dir, 'electrode_results.csv'))
@@ -272,7 +258,6 @@ for mode in modes:
     for train_mod in modalities:
         for test_mod in modalities:
 
-            # --- FILTERING ---
             if mode == 'within' and train_mod != test_mod:
                 continue
             if mode == 'cross' and train_mod == test_mod:
