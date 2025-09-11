@@ -15,7 +15,7 @@ def load_modality_data(base_dir, subjects, modality, font=None, condition=None):
 
     with h5py.File(h5_path, 'r') as f:
         for subject in subjects:
-            subject_group = f"S{subject:02d}.csv"
+            subject_group = f"S{subject:02d}.csv" 
             if subject_group not in f:
                 continue
             subj_grp = f[subject_group]
@@ -36,9 +36,9 @@ def load_modality_data(base_dir, subjects, modality, font=None, condition=None):
                 else:
                     sf_grp = font_grp
 
-                for cond_group_name in ['Par', 'Control']:
-                    if condition is not None and cond_group_name != condition:
-                        continue
+
+                conditions_to_load = [condition] if condition else ['Par', 'Control']
+                for cond_group_name in conditions_to_load:
                     if cond_group_name not in sf_grp:
                         continue
                     cond_grp = sf_grp[cond_group_name]
@@ -72,6 +72,7 @@ def load_modality_data(base_dir, subjects, modality, font=None, condition=None):
                             df['font_type'] = font_type
                             if sub_font:
                                 df['specific_font'] = sub_font
+                            df['condition'] = cond_group_name
 
                             X.append(df)
                             y.extend([label_val] * n_electrodes)

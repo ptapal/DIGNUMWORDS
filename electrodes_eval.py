@@ -47,12 +47,11 @@ def load_modality_data_new(base_dir, subjects, modality, font=None, condition=No
                 else:
                     sf_grp = font_grp
 
-                for cond in ['Par', 'Control']:
-                    if condition and cond != condition:
+                conditions_to_load = [condition] if condition else ['Par', 'Control']
+                for cond_group_name in conditions_to_load:
+                    if cond_group_name not in sf_grp:
                         continue
-                    if cond not in sf_grp:
-                        continue
-                    cond_grp = sf_grp[cond]
+                    cond_grp = sf_grp[cond_group_name]
 
                     for seq_name in cond_grp.keys():
                         seq_idx = int(seq_name.replace('sequence_', ''))
@@ -251,53 +250,41 @@ subjects = [2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 15, 16, 18, 19, 20, 21, 22, 23,
 modalities = ['Dig', 'NumWo']
 modes = ['mixed', 'within', 'cross']
 fonts = ['1F', '20F/A', '20F/S']
-condition = 'Par'
-
+conditions = ['Par', 'Control']
 
 for mode in modes:
     for train_mod in modalities:
         for test_mod in modalities:
-
             if mode == 'within' and train_mod != test_mod:
                 continue
             if mode == 'cross' and train_mod == test_mod:
                 continue
             if mode == 'mixed' and train_mod != 'Dig':
                 continue
-            
-            for font_train in fonts:
-                for font_test in fonts:
-                            if mode == 'mixed':
-                                print(f"\nRunning MIXED evaluation (Dig+NumWo→{test_mod})")
-                                print(f"Font: {font_train}→{font_test}")
-                                print(f"Condition: {condition}")
-                                
-                                results = analyze_electrodes(
-                                    base_dir='h5_freq',
-                                    subjects=subjects,
-                                    train_mod='Dig', 
-                                    test_mod=test_mod,
-                                    condition_train=condition,
-                                    condition_test=condition,
-                                    font_train=font_train,
-                                    font_test=font_test,
-                                    mode='mixed',
-                                    output_dir='results/mixed'
-                                )
-                            else:
-                                print(f"\nRunning {mode.upper()} evaluation ({train_mod}→{test_mod})")
-                                print(f"Font: {font_train}→{font_test}")
-                                print(f"Condition: {condition}")
-                                
-                                results = analyze_electrodes(
-                                    base_dir='h5_freq',
-                                    subjects=subjects,
-                                    train_mod=train_mod,
-                                    test_mod=test_mod,
-                                    condition_train=condition,
-                                    condition_test=condition,
-                                    font_train=font_train,
-                                    font_test=font_test,
-                                    mode=mode,
-                                    output_dir=f'results/{mode}'
-                                )
+
+            for condition_train in conditions:
+                for condition_test in conditions:
+                    for font_train in fonts:
+                        for font_test in fonts:
+                            n_diffs = sum([
+                                font_train != font_test,
+                                condition_train != condition_test
+                            ])
+                            if n_diffs > 1:
+                                continue
+
+                            print(f"\nRunning {mode.upper()} evaluation:")
+                            print(f"{train_mod}({condition_train},{font_train}) → {test_mod}({condition_test},{font_test})")
+
+                            results = analyze_electrodes(
+                                base_dir='h5_freq_c1',
+                                subjects=subjects,
+                                train_mod=train_mod if mode != 'mixed' else 'Dig',
+                                test_mod=test_mod,
+                                condition_train=condition_train,
+                                condition_test=condition_test,
+                                font_train=font_train,
+                                font_test=font_test,
+                                mode=mode,
+                                output_dir=f'results/{mode}'
+                            )

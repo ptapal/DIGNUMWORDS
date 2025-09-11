@@ -20,6 +20,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from load_data import load_modality_data
 
+feature_name_map = {
+    0: 'delta',
+    1: 'theta',
+    2: 'alpha',
+    3: 'beta',
+    4: 'gamma',
+    # 5: 'Electrode',
+    6: 'contrast',
+    7: 'dissimilarity',
+    8: 'homogeneity',
+    9: 'energy',
+    10: 'correlation',
+    11: 'ASM'
+}
+
 def aug_evaluate_modality(base_dir, subjects, modality, 
                           font_train, font_test=None, 
                           condition_train=None, condition_test=None,
@@ -36,6 +51,10 @@ def aug_evaluate_modality(base_dir, subjects, modality,
             raise ValueError("test_mod must be specified for cross-modality evaluation")
         X_train, y_train, _ = load_modality_data(base_dir, subjects, modality, font_train, condition_train)
         X_test, y_test, _ = load_modality_data(base_dir, subjects, test_mod, font_test, condition_test)
+        if 5 in X_train.columns:
+            X_train = X_train.drop(columns=[5])
+        if 5 in X_test.columns:
+            X_test = X_test.drop(columns=[5])
     elif mode == 'within':
         subjects = np.array(subjects)
         np.random.seed(random_state)
@@ -49,6 +68,10 @@ def aug_evaluate_modality(base_dir, subjects, modality,
         if X_train.empty or X_test.empty:
             print("No data found for the selected subjects.")
             return None
+        if 5 in X_train.columns:
+            X_train = X_train.drop(columns=[5])
+        if 5 in X_test.columns:
+            X_test = X_test.drop(columns=[5])
     elif mode == 'mixed':
         if not test_mod:
             raise ValueError("test_mod must be specified for mixed-modality evaluation")
@@ -67,10 +90,14 @@ def aug_evaluate_modality(base_dir, subjects, modality,
 
         train_mask = X_all['subject'].isin(train_subjects)
         X_train, y_train = X_all.loc[train_mask], y_all[train_mask]
-        X_test, y_test, _ = load_modality_data(base_dir, test_subjects, test_mod, font, condition)
+        X_test, y_test, _ = load_modality_data(base_dir, test_subjects, test_mod, font_train, condition_train)
         if X_test.empty:
             print("No test data found for mixed modality.")
             return None
+        if 5 in X_train.columns:
+            X_train = X_train.drop(columns=[5])
+        if 5 in X_test.columns:
+            X_test = X_test.drop(columns=[5])
         
     else:
         raise ValueError("Invalid mode. Choose 'cross', 'within', or 'mixed'")
@@ -79,7 +106,7 @@ def aug_evaluate_modality(base_dir, subjects, modality,
         return None
 
     metadata_cols = ['bin', 'sequence', 'subject']
-    feature_cols = X_train.select_dtypes(include=np.number).columns.difference(metadata_cols)
+    feature_cols = [c for c in X_train.select_dtypes(include=np.number).columns if c not in metadata_cols]
     X_train_num = X_train[feature_cols].copy()
     X_test_num = X_test[feature_cols].copy()
     X_train_num.columns = X_train_num.columns.astype(str)
@@ -94,6 +121,14 @@ def aug_evaluate_modality(base_dir, subjects, modality,
     y_pred = model.predict(X_test_num)
     y_proba = model.predict_proba(X_test_num)[:, 1]
 
+    clf = model.named_steps['clf']
+    feature_importance_df = pd.DataFrame({
+        'feature': feature_cols,
+        'importance': clf.feature_importances_
+    }).sort_values(by='importance', ascending=False)
+
+    feature_importance_df['feature'] = feature_importance_df['feature'].map(feature_name_map).fillna(feature_importance_df['feature'])
+
     metrics = {
         'accuracy': model.score(X_test_num, y_test),
         'balanced_accuracy': balanced_accuracy_score(y_test, y_pred),
@@ -105,7 +140,8 @@ def aug_evaluate_modality(base_dir, subjects, modality,
         'train_font': font_train,
         'test_font': font_test,
         'train_condition': condition_train,
-        'test_condition': condition_test
+        'test_condition': condition_test,
+        'feature_importances': feature_importance_df
     }
 
     if plot_time_resolved and 'bin' in X_test.columns:
@@ -143,12 +179,5 @@ def aug_evaluate_modality(base_dir, subjects, modality,
         plt.show()
 
         metrics['time_resolved'] = bin_acc_all
-
-    clf = model.named_steps['clf']
-    feature_importance_df = pd.DataFrame({
-        'feature': feature_cols,
-        'importance': clf.feature_importances_
-    }).sort_values(by='importance', ascending=False)
-    metrics['feature_importances'] = feature_importance_df
 
     return metrics

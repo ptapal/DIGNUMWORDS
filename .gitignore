@@ -9,3 +9,8 @@ results/
 epbin-data_DIGNUMWORDS-SHAPE/
 csv_data/
 h5_freq/
+h5_freq_c1/
+csv_data_c1/
+exp.ipynb
+analysis_aug/
+analysis/

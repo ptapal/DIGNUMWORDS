@@ -11,6 +11,21 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 from load_data import load_modality_data
 
+feature_name_map = {
+    0: 'delta',
+    1: 'theta',
+    2: 'alpha',
+    3: 'beta',
+    4: 'gamma',
+    # 5: 'Electrode',
+    6: 'contrast',
+    7: 'dissimilarity',
+    8: 'homogeneity',
+    9: 'energy',
+    10: 'correlation',
+    11: 'ASM'
+}
+
 def evaluate_modality(base_dir, subjects, modality, font, condition,
                       mode='within', test_mod=None, plot_time_resolved=True,
                       test_size=0.2, random_state=42):
@@ -29,12 +44,20 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
         if X_train.empty or X_test.empty:
             print("No data found for the selected subjects.")
             return None
+        if 5 in X_train.columns:
+            X_train = X_train.drop(columns=[5])
+        if 5 in X_test.columns:
+            X_test = X_test.drop(columns=[5])
     elif mode == 'cross':
         X_train, y_train, subj_train = load_modality_data(base_dir, subjects, modality, font, condition)
         X_test, y_test, subj_test = load_modality_data(base_dir, subjects, test_mod, font, condition)
         if X_train.empty or X_test.empty:
             print("No data found for cross modality.")
             return None
+        if 5 in X_train.columns:
+            X_train = X_train.drop(columns=[5])
+        if 5 in X_test.columns:
+            X_test = X_test.drop(columns=[5])
     elif mode == 'mixed':
         X_dig, y_dig, _ = load_modality_data(base_dir, subjects, 'Dig', font, condition)
         X_num, y_num, _ = load_modality_data(base_dir, subjects, 'NumWo', font, condition)
@@ -54,12 +77,16 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
         if X_test.empty:
             print("No test data found for mixed modality.")
             return None
+        if 5 in X_train.columns:
+            X_train = X_train.drop(columns=[5])
+        if 5 in X_test.columns:
+            X_test = X_test.drop(columns=[5])
 
     else:
         raise ValueError("Invalid mode")
 
-    metadata_cols = ['bin', 'sequence', 'subject']
-    feature_cols = X_train.select_dtypes(include=np.number).columns.difference(metadata_cols)
+    metadata_cols = ['bin', 'sequence', 'subject'] 
+    feature_cols = [c for c in X_train.select_dtypes(include=np.number).columns if c not in metadata_cols]
     X_train_num = X_train[feature_cols].copy()
     X_test_num = X_test[feature_cols].copy()
     X_train_num.columns = X_train_num.columns.astype(str)
@@ -74,10 +101,13 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
     y_pred = model.predict(X_test_num)
     y_proba = model.predict_proba(X_test_num)[:, 1]
 
+    clf = model.named_steps['clf']
     feature_importance_df = pd.DataFrame({
         'feature': feature_cols,
-        'importance': model.named_steps['clf'].feature_importances_
+        'importance': clf.feature_importances_
     }).sort_values(by='importance', ascending=False)
+
+    feature_importance_df['feature'] = feature_importance_df['feature'].map(feature_name_map).fillna(feature_importance_df['feature'])
 
     metrics = {
         'accuracy': model.score(X_test_num, y_test),
@@ -125,14 +155,5 @@ def evaluate_modality(base_dir, subjects, modality, font, condition,
         plt.show()
 
         metrics['time_resolved'] = bin_acc_all
-
-    clf = model.named_steps['clf']
-    feature_names = list(feature_cols)
-    feature_importance_df = pd.DataFrame({
-        'feature': feature_names,
-        'importance': clf.feature_importances_
-    }).sort_values(by='importance', ascending=False)
-
-    metrics['feature_importances'] = feature_importance_df
 
     return metrics
