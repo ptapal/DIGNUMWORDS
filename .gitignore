@@ -13,4 +13,8 @@ h5_freq_c1/
 csv_data_c1/
 exp.ipynb
 analysis_aug/
+data_2/
 analysis/
+unlabeled_data/
+umap_hdbscan_figs/
+*.zip

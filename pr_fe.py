@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy.signal import spectrogram, butter, filtfilt
+from scipy.fft import fft, fftfreq
 from skimage.feature import graycomatrix, graycoprops
 from skimage import img_as_ubyte
 import mne
@@ -19,51 +20,57 @@ class FeatureExtractor:
 
     # computing spectrogram (short time fourier transform) for a single electrode
     def compute_spectrogram(self, signal):
-        f, t, Sxx = spectrogram(signal, fs=self.sampling_rate, nperseg=256, noverlap=128)
+        nperseg = max(32, min(256, len(signal)))  # minimum segment length 32
+        noverlap = min(128, nperseg // 2)
+        f, t, Sxx = spectrogram(signal, fs=self.sampling_rate, nperseg=nperseg, noverlap=noverlap)
         return f, t, Sxx
 
     # extract gray-level co-occurrence matrix texture features from a spectrogram.
     def compute_glcm_features(self, spectrogram_img):
-        spectrogram_img = img_as_ubyte(spectrogram_img / np.max(spectrogram_img))
-        bins = np.linspace(0, 255, 17)[:-1]
-        quantized_img = np.digitize(spectrogram_img, bins)
-        glcm = graycomatrix(quantized_img, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4], levels=17)
-        return {
-            'contrast': np.mean(graycoprops(glcm, 'contrast')),
-            'dissimilarity': np.mean(graycoprops(glcm, 'dissimilarity')),
-            'homogeneity': np.mean(graycoprops(glcm, 'homogeneity')),
-            'energy': np.mean(graycoprops(glcm, 'energy')),
-            'correlation': np.mean(graycoprops(glcm, 'correlation')),
-            'ASM': np.mean(graycoprops(glcm, 'ASM'))
-        }
-    
-    # frequency band analysis
-    '''
-    # for basic csv structure
-    def compute_frequency_features(self, signal, n_fft=256):
-        psds, freqs = mne.time_frequency.psd_array_welch(signal.get_data(), signal.info['sfreq'], fmin= 1, fmax=80, n_fft=n_fft)
+        # normalize to [0,1] safely
+        max_val = np.max(spectrogram_img)
+        if max_val == 0:
+            spectrogram_img = np.zeros_like(spectrogram_img)
+        else:
+            spectrogram_img = spectrogram_img / max_val
 
-        bands = {
-            'delta': (1, 4),
-            'theta': (4, 8),
-            'alpha': (8, 13),
-            'beta':  (13, 30),
-            'gamma': (30, 80)
-        }
+        spectrogram_img = img_as_ubyte(spectrogram_img)
+
+        # quantize safely
+        bins = np.linspace(0, 255, 17)
+        quantized_img = np.digitize(spectrogram_img, bins) - 1
+        quantized_img[quantized_img >= 16] = 15
+
+        # if the image is constant, return defaults
+        if np.min(quantized_img) == np.max(quantized_img):
+            return {'contrast':0,'dissimilarity':0,'homogeneity':1,'energy':1,'correlation':0,'ASM':1}
+
+        glcm = graycomatrix(quantized_img, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4], levels=16)
 
         features = {}
-        for band, (low, high) in bands.items():
-            band_idx = np.logical_and(freqs >= low, freqs <= high)
-            band_power = np.mean(psds[:, band_idx], axis=1)  
-            features[band] = band_power
+        for prop in ['contrast','dissimilarity','homogeneity','energy','correlation','ASM']:
+            val = np.mean(graycoprops(glcm, prop))
+            features[prop] = 0 if np.isnan(val) else val
 
-        frequency_df = pd.DataFrame(features)
-        frequency_df['Electrode'] = signal.info['ch_names']
+        return features
+    
+    def compute_ssvep_feature(self, signal, freq_of_interest=3.75):
+        ssvep_list = []
 
+        # Case 1: MNE RawArray (multi-channel)
+        if hasattr(signal, "get_data"):
+            data = signal.get_data()
+            ch_names = signal.info['ch_names']
+            for i, ch_name in enumerate(ch_names):
+                sig = data[i]
+                n_samples = len(sig)
+                yf = np.abs(fft(sig))
+                xf = fftfreq(n_samples, 1/self.sampling_rate)
+                idx = np.argmin(np.abs(xf - freq_of_interest))
+                ssvep_list.append({'Electrode': ch_name, 'ssvep_amp': yf[idx]})
 
-        return frequency_df
+        return pd.DataFrame(ssvep_list)
 
-      ''' 
     def compute_frequency_features(self, signal, n_fft=None):
         n_times = signal.n_times
         if n_fft is None or n_fft > n_times:
@@ -116,4 +123,16 @@ class FeatureExtractor:
     
     # merging datasets
     def merging_feature_data(self, signal, df):
-        return pd.merge(self.compute_frequency_features(signal), self.extract_glcm_features(df), on='Electrode', how='inner')
+        freq_df = self.compute_frequency_features(signal)
+        glcm_df = self.extract_glcm_features(df)
+
+        # SSVEP feature
+        ssvep_list = []
+        for i in df.columns:
+            amp = self.compute_ssvep_feature(df[i].values)
+            ssvep_list.append({'Electrode': i, 'ssvep_amp': amp})
+        ssvep_df = pd.DataFrame(ssvep_list)
+
+        # merge all features
+        merged_df = freq_df.merge(glcm_df, on='Electrode').merge(ssvep_df, on='Electrode')
+        return merged_df
