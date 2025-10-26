@@ -18,3 +18,8 @@ analysis/
 unlabeled_data/
 umap_hdbscan_figs/
 *.zip
+*.csv
+unsup_loso/
+umap_hdbscan_oddeven_parity/
+umap_hdbscan_oddeven/
+umap_hdbscan_global/
