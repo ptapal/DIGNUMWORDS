@@ -1,50 +1,105 @@
-### Decoding filenames
+# DIGNUMWORDS
 
-There are 12 different conditions following a Stimulus Modality (**Dig**its or **Num**ber **Wo**rds) x Stimulus Font (1 font, 20 **S**tandard fonts or 20 **A**typical fonts) x Number Set Type (**P**arity or **C**ontrol) structure
+Unsupervised EEG analysis of numerical parity processing using FPVS (Frequency-tagging / Fast Periodic Visual Stimulation).
 
-The data in the folder is not raw data and it has already been preprocessed up to segmentation of the data by condition. 
-Filenames reflect the processing stages that have been applied to each file, from right to left:
-- "chanlabels"/"chansel"/"chanlocs" steps are for renaming channels to fit the 68 channels template and for attributing coordinates to channels for plotting response topographies
-- "but" step applies a Butterworth band pass filter for 0.1 to 80 Hz (filter order 4) 
-- "ep1" step is a first segmentation step where we select only parts of the signal corresponding to sequences of interest, i.e., we keep signal from -1 before the start trigger (tells when the first stimulus is presented and indicates which condition is administered) and for a duration of 65 seconds; at this stage, all sequences are stored into one file (not separated by condition)
-- "ica" step means we ran an independent component analysis(ICA) on the data: this is for finding a component reflecting eye blinks and removing it from data if there are too many of them
-- "icfilt" step means the dataset needed an ICA and it was applied, i.e., the component reflecting eye blinks was removed from the data (not all participants needed ICA)
-- "fix" followed by a channel name means this electrode was interpolated due to noisy signal; interpolation is performed with 3 neighboring channels
-- "rr" step means data was re-referenced to the average of all EEG channels
-- "epbin" followed by abbreviation of condition and its corresponding trigger number means that data was further segmented to include only the exact number of bins we are interested in. This number of bins is calculated using the frequency of interest (3.75Hz), the sampling rate (512) and the sequence duration at full contrast (60).
+Two independent datasets are analysed:
+- **D1** (n=30): digits and number words in German, 3 font conditions (1F, 20F/A, 20F/S), ~60 s sequences
+- **D2** (n=15): digits only, 4 font conditions (1F, 10F/S, 10F/M, 20F/HD), ~50 s sequences
 
-### Explanation of the files
+In both datasets, stimuli alternate at F_2 = 3.75 Hz between two groups whose composition defines the condition (Parity: odd vs even; Control: {2,3,6,7} vs {4,5,8,9}). The EEG discrimination response appears at F₂ and its harmonics.
 
-- `data/` directory stores all raw samples in csv format without bin separation without explicit odd/even detection: time,channel,condition,value
-- `csv_data/` directory stores all raw samples in csv format with proper bin separation with explicit odd/even detection: sequence, bin, label, channel, time_in_bin, value
-- `data/mat_files_cleaned.txt` all mat files that were converted to csv
-- `pr_fe.py` module with preprocessing and feature extraction
-- `environment.yml` lists all dependencies of env
-- `h5_load.ipynb` loads data in hdf5 format for hierarchal structure
-- `h5_sep/` stores files generated in `h5_load.ipynb`
-- `ML.ipynb` includes Machine Learning pipeline for all combinations
-- `modality_eval.py`, `diagnostics.py` and `load_data.py` are helper functions for Machine Learning pipeline
-- `augmented_modality_eval.py` is a helper function for in-depth cross-modality investigation
-- `electrodes_eval.py` is a function which evalutes impact of electrodes/cerebral regions and draw a topomap
-- `electrodes.py` contains all constants needed for electodes and their topomaps
-- `el_reference.py` is the script which draws a topomap with referenced labels
+---
 
-### Goal
+## Repository structure
 
-Train a model on digit sequences and test it on number word sequences (and vice versa) across different modalities in order to investigate to what extent digit and word representations are shared.
-
-### Methodology
-
-1. Filter out mat files from the initial dataset and convert them to csv
-2. Use pre-processing (i.e. STFT) and feature extraction (i.e. GLCM and frequency bands) from module `pr_fe.py` to convert everything in hierarchal h5 format through `h5_load.ipynb`, separating conditions
-3. Do cross-modality, within-modality and mixed-modality predictions through `ML.ipynb`, employing XGBoost classifier. Jupyter notebook allows to interactively change parameters (e.g. parity or control) and helper functions such as `modality_eval.py`, `diagnostics.py` and `load_data.py`
-4. Do analogous thing with augmented analysis (using `augmented_modality_eval.py`)
-
-### Instructions
-
-1. Install dependencies from `environment.yml`
 ```
+data/                         In .gitignore, available upon request
+  angelique_v2/               D1 source data — preprocessed .mat files 
+  talia/                      D2 source data — preprocessed .mat files
+  angelique_v1/               Earlier D1 version, kept for reference
+
+h5_new/                       Intermediate HDF5 cache built by rebuild_seqlevel.py (in .gitignore, available upon request)
+  angelique_v2_seqlevel.h5
+  talia_seqlevel.h5
+
+results/                      All output figures and CSVs, organised by script
+  seqlevel/                   Diagnostic plots from the H5 build step
+  within_subject/             Clustering results (histograms, UMAP grids, score CSV)
+  font_effects/               Forest plots, delta heatmap
+  harmonic_comparison/        Violin/bar comparison across harmonic subsets
+  epoch_analysis/             diff-ERP diagnostic plots
+
+electrodes.py                 Channel name list (biosemi_68_order), region map
+epoch_analysis.py             diff-ERP feature construction from raw CSV sequences
+rebuild_seqlevel.py           SNR feature extraction; builds h5_new/ cache from .mat source files
+within_subject_analysis.py    Main within-subject clustering pipeline (PCA -> UMAP -> GMM/KMeans)
+font_effect_analysis.py       Per-participant font effect sizes (Cohen's d on SNR delta)
+harmonic_comparison.py        Compares discrimination vs stimulation harmonics on all electrodes
+
+environment.yml               Conda environment specification
+```
+
+---
+
+## Pipeline overview
+
+```
+data/ (.mat files)
+       |
+       v
+rebuild_seqlevel.py -> h5_new/*.h5   (SNR features, 748-D per sequence)
+       │
+       |-> within_subject_analysis.py -> results/within_subject/
+       |-> font_effect_analysis.py    -> results/font_effects/
+       |-> harmonic_comparison.py     -> results/harmonic_comparison/
+
+data/ (CSV sequences, via epoch_analysis.py)
+       |
+       |-> within_subject_analysis.py  (diff-ERP branch)
+            font_effect_analysis.py
+```
+
+`rebuild_seqlevel.py` must be run first. All other scripts read from `h5_new/` and can be run independently afterwards.
+
+---
+
+## How to run
+
+### 1. Set up the environment
+
+```bash
 conda env create -f environment.yml
-conda activate env
+conda activate myenv
 ```
-2. Run notebooks in the following order: `mat_load.ipynb` → `h5_load.ipynb` → `ML.ipynb`
+
+### 2. Build the H5 feature cache
+
+This reads `.mat` files from `data/`, extracts per-sequence SNR features (748-D: 68 electrodes × 11 features), and writes `h5_new/angelique_v2_seqlevel.h5` and `h5_new/talia_seqlevel.h5`.
+
+```bash
+python rebuild_seqlevel.py
+```
+
+Expected output: progress per subject, then diagnostic UMAP plots saved to `results/seqlevel/`.
+
+### 3. Run the analyses
+
+Each script is self-contained and reads from `h5_new/`. Run in any order.
+
+**Within-subject clustering** (main result):
+```bash
+python within_subject_analysis.py
+```
+Runs PCA -> UMAP -> GMM/KMeans within each participant. Outputs purity scores, silhouette scores, ARI, UMAP grid plots, and a summary CSV to `results/within_subject/`.
+
+**Font effect analysis**:
+```bash
+python font_effect_analysis.py
+```
+Computes per-participant Cohen's d (Par − Ctrl SNR delta) for each font condition. Outputs forest plots and a delta heatmap to `results/font_effects/`.
+
+**Harmonic comparison**:
+```bash
+python harmonic_comparison.py
+```
+Compares within-subject clustering purity for discrimination harmonics (3.75 + 11.25 + 18.75 Hz) vs stimulation harmonics (7.5 + 15 Hz), both using all 68 electrodes. Outputs to `results/harmonic_comparison/`.

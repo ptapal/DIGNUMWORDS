@@ -54,7 +54,7 @@ def get_biosemi68_mne_montage():
     montage64 = mne.channels.make_standard_montage('biosemi64')
     ch_pos = montage64.get_positions()['ch_pos']
 
-    # Add extra channels (PO3, PO4, PO7, PO8)
+    # add extra channels (PO3, PO4, PO7, PO8)
     extra_channels = {
         'PO3': (-0.028, -0.09, 0.0),
         'PO4': (0.028, -0.09, 0.0),
@@ -70,13 +70,12 @@ def get_biosemi68_mne_montage():
         'EOG2': (0.04, 0.06, 0.0)
     }
 
-    # Update positions
     ch_pos.update(extra_channels)
 
-    # Create DigMontage object
     montage68 = mne.channels.make_dig_montage(ch_pos=ch_pos, coord_frame='head')
     return montage68
 
 # Example usage
-montage = get_biosemi68_mne_montage()
-print(montage.ch_names)  # All 68 + EXG/EOG channels
+if __name__ == "__main__":
+    montage = get_biosemi68_mne_montage()
+    print(montage.ch_names)  
