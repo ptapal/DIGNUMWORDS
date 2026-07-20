@@ -2,11 +2,15 @@ name: env
 channels:
   - conda-forge
 dependencies:
+  - numpy
   - scipy
   - pandas
-  - ipykernel
+  - matplotlib
+  - scikit-learn
+  - umap-learn
   - h5py
   - mne
+  - ipykernel
   - xgboost
   - imbalanced-learn
 prefix: /Users/a1234/miniforge3/envs/env

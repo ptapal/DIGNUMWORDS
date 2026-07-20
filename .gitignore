@@ -1,2 +1,4 @@
 data/
 h5_new/
+__pycache__/
+.vscode/
