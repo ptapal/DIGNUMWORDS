@@ -15,7 +15,7 @@ warnings.filterwarnings('ignore')
 sys.path.insert(0, os.path.dirname(__file__))
 from rebuild_seqlevel import (
     parse_angelique_fname, parse_talia_fname,
-    _get_talia_files, N_ELEC, RANDOM, COND_COLORS, OCC_IDX,
+    _get_talia_files, N_ELEC, RANDOM, COND_COLORS,
 )
 
 # paths
@@ -110,7 +110,7 @@ def build_records(csv_dir, parse_fn, get_files_fn, dataset_name,
         for seq_i, eeg in seq_data.items():
             diff_erp, ne, no = compute_diff_erp(eeg)
 
-            occ_rms = diff_erp_rms(diff_erp)[OCC_IDX].mean()
+            rms_all = diff_erp_rms(diff_erp).mean()
 
             font_label = ftype
             if sfont:
@@ -129,7 +129,7 @@ def build_records(csv_dir, parse_fn, get_files_fn, dataset_name,
                 condition   = cond,
                 seq_idx     = seq_counts[k] - 1,
                 diff_erp    = diff_erp.astype(np.float32),
-                rms_occ     = float(occ_rms),
+                rms_all     = float(rms_all),
                 n_even_epochs = ne,
                 n_odd_epochs  = no,
             ))
@@ -140,12 +140,12 @@ def build_records(csv_dir, parse_fn, get_files_fn, dataset_name,
 
 # plot 1: mean |diff_ERP| per condition
 def plot_rms_comparison(df, out_dir):
-    """Violin + per-subject scatter of occipital diff-ERP RMS, Par vs Control."""
+    """Violin + per-subject scatter of diff-ERP RMS (all electrodes), Par vs Control."""
     combos = df[['dataset', 'modality']].drop_duplicates().values.tolist()
     fig, axes = plt.subplots(len(combos), 2, figsize=(13, 5 * len(combos)),
                              squeeze=False)
     fig.suptitle(
-        'Occipital diff-ERP RMS — Par vs Control\n'
+        'diff-ERP RMS (all electrodes) — Par vs Control\n'
         'S20+S30 excluded; epoch at 7.5 Hz; diff = odd - even position',
         fontsize=12, fontweight='bold')
 
@@ -157,7 +157,7 @@ def plot_rms_comparison(df, out_dir):
         title = f'{ds} — {mod}'
 
         for xi, cond in enumerate(['Par', 'Control']):
-            vals  = sub[sub['condition'] == cond]['rms_occ'].values
+            vals  = sub[sub['condition'] == cond]['rms_all'].values
             parts = ax_v.violinplot(vals, [xi], widths=0.5, showmeans=True)
             for pc in parts['bodies']:
                 pc.set_facecolor(COND_COLORS[cond]); pc.set_alpha(0.5)
@@ -169,11 +169,11 @@ def plot_rms_comparison(df, out_dir):
 
         ax_v.set_xticks([0, 1])
         ax_v.set_xticklabels(['Parity', 'Control'])
-        ax_v.set_ylabel('Occipital diff-ERP RMS (µV)')
+        ax_v.set_ylabel('diff-ERP RMS (µV, all elec)')
         ax_v.set_title(title)
 
-        par_s  = sub[sub['condition'] == 'Par'].groupby('subject')['rms_occ'].mean()
-        ctrl_s = sub[sub['condition'] == 'Control'].groupby('subject')['rms_occ'].mean()
+        par_s  = sub[sub['condition'] == 'Par'].groupby('subject')['rms_all'].mean()
+        ctrl_s = sub[sub['condition'] == 'Control'].groupby('subject')['rms_all'].mean()
         com    = par_s.index.intersection(ctrl_s.index)
         if len(com) >= 3:
             pv, cv = par_s[com].values, ctrl_s[com].values
@@ -210,7 +210,7 @@ def plot_per_font_rms(df, out_dir):
     fig, axes  = plt.subplots(len(combos), len(font_types),
                               figsize=(5 * len(font_types), 4.5 * len(combos)),
                               squeeze=False)
-    fig.suptitle('Occipital diff-ERP RMS by Font — Par vs Control\n'
+    fig.suptitle('diff-ERP RMS (all electrodes) by Font — Par vs Control\n'
                  '★ = best condition per FPVS analysis', fontsize=12)
 
     stat_rows = []
@@ -226,7 +226,7 @@ def plot_per_font_rms(df, out_dir):
                 continue
 
             for xi, cond in enumerate(['Par', 'Control']):
-                vals = fsub[fsub['condition'] == cond]['rms_occ'].values
+                vals = fsub[fsub['condition'] == cond]['rms_all'].values
                 if not len(vals): continue
                 parts = ax.violinplot(vals, [xi], widths=0.5, showmeans=True)
                 for pc in parts['bodies']:
@@ -236,8 +236,8 @@ def plot_per_font_rms(df, out_dir):
                     np.random.default_rng(RANDOM).uniform(-0.1, 0.1, len(vals)),
                     vals, c=COND_COLORS[cond], alpha=0.3, s=12)
 
-            pv  = fsub[fsub['condition'] == 'Par'].groupby('subject')['rms_occ'].mean()
-            cv  = fsub[fsub['condition'] == 'Control'].groupby('subject')['rms_occ'].mean()
+            pv  = fsub[fsub['condition'] == 'Par'].groupby('subject')['rms_all'].mean()
+            cv  = fsub[fsub['condition'] == 'Control'].groupby('subject')['rms_all'].mean()
             com = pv.index.intersection(cv.index)
             stat_txt = ''
             if len(com) >= 3:
@@ -258,7 +258,7 @@ def plot_per_font_rms(df, out_dir):
             ax.set_xticks([0, 1])
             ax.set_xticklabels(['Par', 'Ctrl'], fontsize=8)
             if ci == 0:
-                ax.set_ylabel('RMS occ (µV)')
+                ax.set_ylabel('RMS all elec (µV)')
 
             if best:
                 for spine in ax.spines.values():
@@ -283,14 +283,14 @@ def plot_diff_erp_waveforms(records, out_dir):
     fig, axes = plt.subplots(len(combos), 1, figsize=(10, 4 * len(combos)),
                              squeeze=False)
     fig.suptitle('Grand-average diff_ERP (odd - even)\n'
-                 'Occipital average; shading = ±1 SEM across sequences', # legacy
+                 'All-electrode average; shading = ±1 SEM across sequences',
                  fontsize=12, fontweight='bold')
 
     for ri, (ds, mod) in enumerate(combos):
         ax = axes[ri, 0]
         for cond in ['Par', 'Control']:
             erps = np.stack([
-                r['diff_erp'][:, OCC_IDX].mean(axis=1)
+                r['diff_erp'].mean(axis=1)
                 for r in records
                 if r['dataset'] == ds and r['modality'] == mod
                    and r['condition'] == cond
@@ -326,14 +326,11 @@ def plot_umap_diff_erp(records, df, out_dir):
     n = len(records)
     # stack features
     full_ravel = np.stack([r['diff_erp'].ravel() for r in records]) # (n, 4624)
-    occ_ravel  = np.stack([r['diff_erp'][:, OCC_IDX].ravel()        # (n, 612)
-                           for r in records])
     rms_all    = np.stack([diff_erp_rms(r['diff_erp']) for r in records]) # (n, 68)
 
     feat_sets = [
-        ('Full diff-ERP (4624)',    full_ravel),
-        ('Occipital diff-ERP (612)', occ_ravel),
-        ('Per-elec RMS (68)',        rms_all),
+        ('Full diff-ERP (4624)', full_ravel),
+        ('Per-elec RMS (68)',    rms_all),
     ]
 
     colorings = [
@@ -397,12 +394,12 @@ def plot_umap_diff_erp(records, df, out_dir):
 # plot 5: UMAP per-condition subset with clustering
 def plot_umap_clustered(records, df, out_dir):
     """
-    UMAP on occipital diff-ERP, then GMM(k=2) and KMeans(k=2) purity.
+    UMAP on full diff-ERP, then GMM(k=2) and KMeans(k=2) purity.
     """
-    occ_ravel = np.stack([r['diff_erp'][:, OCC_IDX].ravel() for r in records])
-    subjects  = [r['subject'] for r in records]
+    full_ravel = np.stack([r['diff_erp'].ravel() for r in records])
+    subjects   = [r['subject'] for r in records]
 
-    fc = occ_ravel.copy().astype(np.float64)
+    fc = full_ravel.copy().astype(np.float64)
     for subj in set(subjects):
         m = np.array([s == subj for s in subjects])
         fc[m] -= fc[m].mean(axis=0)
@@ -418,7 +415,7 @@ def plot_umap_clustered(records, df, out_dir):
     results  = []
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
-    fig.suptitle('Occipital diff-ERP; GMM and KMeans purity\n'
+    fig.suptitle('Full diff-ERP; GMM and KMeans purity\n'
                  'Par=red circle; Control=blue triangle',
                  fontsize=12, fontweight='bold')
     markers = ['o', '^']
@@ -451,7 +448,7 @@ def plot_umap_clustered(records, df, out_dir):
     fig.savefig(out, dpi=150, bbox_inches='tight')
     plt.close(fig)
     print(f'Saved {out}')
-    print('Clustering purity (occipital diff-ERP):')
+    print('Clustering purity (full diff-ERP):')
     for r in results:
         print(f"  {r['method']:14}  purity={r['purity']:.3f}")
     return results
@@ -460,8 +457,8 @@ def plot_umap_clustered(records, df, out_dir):
 def compute_stats(df, out_dir):
     rows = []
     for (ds, mod, font), grp in df.groupby(['dataset', 'modality', 'font_label']):
-        par  = grp[grp['condition'] == 'Par'].groupby('subject')['rms_occ'].mean()
-        ctrl = grp[grp['condition'] == 'Control'].groupby('subject')['rms_occ'].mean()
+        par  = grp[grp['condition'] == 'Par'].groupby('subject')['rms_all'].mean()
+        ctrl = grp[grp['condition'] == 'Control'].groupby('subject')['rms_all'].mean()
         com  = par.index.intersection(ctrl.index)
         if len(com) < 3:
             continue
@@ -511,7 +508,7 @@ def main():
     print(f'\nTotal sequences: {len(df)}')
     print(df.groupby(['dataset', 'modality', 'font_label', 'condition']).size().to_string())
 
-    print('\nStatistics (occipital diff-ERP RMS)')
+    print('\nStatistics (diff-ERP RMS, all electrodes)')
     stats = compute_stats(df, OUT_DIR)
     for _, r in stats.iterrows():
         sig  = ('***' if r.p_value < 0.001 else '**' if r.p_value < 0.01

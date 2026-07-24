@@ -74,7 +74,7 @@ conda activate myenv
 
 ### 2. Build the H5 feature cache
 
-This reads `.mat` files from `data/`, extracts per-sequence SNR features (748-D: 68 electrodes × 11 features), and writes `h5_new/angelique_v2_seqlevel.h5` and `h5_new/talia_seqlevel.h5`.
+This reads `.mat` files from `data/`, extracts per-sequence SNR features (748-D: 68 electrodes x 11 features), and writes `h5_new/angelique_v2_seqlevel.h5` and `h5_new/talia_seqlevel.h5`.
 
 ```bash
 python rebuild_seqlevel.py

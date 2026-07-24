@@ -14,9 +14,10 @@ from rebuild_seqlevel import (
 )
 from epoch_analysis import (
     build_records as build_erp_records,
-    ANG_CSV_DIR, TAL_CSV_DIR, 
+    ANG_CSV_DIR, TAL_CSV_DIR,
 )
 from rebuild_seqlevel import parse_angelique_fname, parse_talia_fname, _get_talia_files
+from electrodes import get_biosemi68_mne_montage, biosemi_68_order, RETTER_ROI, RETTER_ROI_IDX
 
 OUT_DIR = 'results/font_effects'
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -248,7 +249,122 @@ def print_ranking(ranking):
                       f't={r["t"]:+.2f}  p={r["p"]:.4f}  {sig}  d={r["cohen_d"]:+.3f}  '
                       f'{r["pct_pos"]:.0f}% Par>Ctrl')
 
-# main
+def _eeglab_cmap():
+    from matplotlib.colors import LinearSegmentedColormap
+    colors = [
+        (0.00, 0.00, 0.50), (0.00, 0.00, 1.00), (0.00, 0.75, 1.00),
+        (0.00, 1.00, 1.00), (0.50, 1.00, 0.50), (1.00, 1.00, 0.00),
+        (1.00, 0.50, 0.00), (1.00, 0.00, 0.00), (0.50, 0.00, 0.00),
+    ]
+    return LinearSegmentedColormap.from_list('eeglab', colors, N=256)
+
+
+def plot_topomap_font_effect(df_snr, out_dir):
+    import mne
+
+    N_FEATS = 11
+    CMAP    = _eeglab_cmap()
+
+    montage = get_biosemi68_mne_montage()
+    info = mne.create_info(ch_names=biosemi_68_order, sfreq=512, ch_types='eeg')
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        info.set_montage(montage)
+
+    all_pos2d = np.array([info['chs'][i]['loc'][:2] for i in range(68)])
+    # 15% larger than outermost electrode so all markers sit inside the head circle
+    sphere_r  = float(np.max(np.linalg.norm(all_pos2d, axis=1))) * 1.15
+    roi_xy    = np.array([info['chs'][i]['loc'][:2] for i in RETTER_ROI_IDX])
+    circ_r    = sphere_r * 0.065
+
+    subj_records = []
+    for (ds, subj, mod, font), grp in df_snr.groupby(
+            ['dataset', 'subject', 'modality', 'font_label']):
+        par  = grp[grp['condition'] == 'Par']['flat'].values
+        ctrl = grp[grp['condition'] == 'Control']['flat'].values
+        if not len(par) or not len(ctrl):
+            continue
+        snr_par  = np.stack([f[0::N_FEATS] for f in par]).mean(axis=0)
+        snr_ctrl = np.stack([f[0::N_FEATS] for f in ctrl]).mean(axis=0)
+        subj_records.append(dict(dataset=ds, subject=subj, modality=mod,
+                                 font=font, delta=snr_par - snr_ctrl))
+
+    if not subj_records:
+        print('[topomap] no data — skipping')
+        return
+
+    groups = {}
+    for r in subj_records:
+        groups.setdefault((r['dataset'], r['modality'], r['font']),
+                          []).append(r['delta'])
+
+    DS_LABEL        = {'Angelique': 'D1', 'Talia': 'D2'}
+    combos          = sorted({(k[0], k[1]) for k in groups})
+    fonts_per_combo = {c: sorted(k[2] for k in groups if (k[0], k[1]) == c)
+                       for c in combos}
+
+    all_means = np.concatenate([np.mean(v, axis=0) for v in groups.values()])
+    vlim      = float(np.percentile(np.abs(all_means), 97))
+    norm      = plt.Normalize(vmin=-vlim, vmax=vlim)
+
+    MAP = 3.8
+    for ds, mod in combos:
+        fonts  = fonts_per_combo[(ds, mod)]
+        n_cols = len(fonts)
+        fig, axes = plt.subplots(1, n_cols, figsize=(MAP * n_cols + 1.1, MAP + 0.8))
+        if n_cols == 1:
+            axes = [axes]
+        fig.patch.set_facecolor('white')
+
+        for col_i, font in enumerate(fonts):
+            ax         = axes[col_i]
+            delta_mean = np.mean(groups[(ds, mod, font)], axis=0)
+            n_subj     = len(groups[(ds, mod, font)])
+
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore')
+                mne.viz.plot_topomap(
+                    delta_mean, info, axes=ax, show=False,
+                    vlim=(-vlim, vlim), cmap=CMAP, sensors='k+',
+                    contours=6, extrapolate='head',
+                    sphere=sphere_r, image_interp='cubic',
+                )
+
+            for coll in ax.collections:
+                try:
+                    if coll.get_linewidth()[0] > 0:
+                        coll.set_edgecolor('black')
+                        coll.set_linewidth(0.7)
+                except Exception:
+                    pass
+
+            for xy in roi_xy:
+                ax.add_patch(plt.Circle(xy, circ_r, fill=False,
+                                        edgecolor='black', linewidth=2.0, zorder=10))
+
+            font_label = font.replace('/', '/\n')
+            ax.set_title(f'{font_label}\nn={n_subj}', fontsize=10, pad=4)
+
+        ds_label = DS_LABEL.get(ds, ds)
+        fig.suptitle(
+            f'Scalp topography: Parity − Control  (SNR @ 3.75 Hz)\n{ds_label}  /  {mod}',
+            fontsize=11, fontweight='bold', y=1.02,
+        )
+        fig.subplots_adjust(right=0.86, wspace=0.04, top=0.88, bottom=0.04)
+        cax = fig.add_axes([0.88, 0.08, 0.025, 0.80])
+        sm  = plt.cm.ScalarMappable(cmap=CMAP, norm=norm)
+        sm.set_array([])
+        cb  = fig.colorbar(sm, cax=cax)
+        cb.set_label('SNR delta  (Par − Ctrl)', fontsize=9, labelpad=4)
+        cb.ax.tick_params(labelsize=8)
+        cb.ax.axhline(0, color='black', lw=1.2)
+
+        out = os.path.join(out_dir, f'topomap_{ds_label}_{mod}.png')
+        fig.savefig(out, dpi=180, bbox_inches='tight', facecolor='white')
+        plt.close(fig)
+        print(f'Saved {out}')
+
+
 def main():
     print('=' * 70)
     print('Font effect analysis — effect-size approach (no clustering)')
@@ -279,6 +395,7 @@ def main():
     forest_plot(ranking, 'delta_snr', 'SNR',
                 os.path.join(OUT_DIR, 'forest_plot_snr.png'))
     delta_heatmap(df_eff, OUT_DIR)
+    plot_topomap_font_effect(df_snr, OUT_DIR)
 
     print(f'\nAll outputs -> {OUT_DIR}/')
 
