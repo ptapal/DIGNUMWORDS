@@ -1,0 +1,11 @@
+dataset,modality,font,n_subjects,mean_rms_par,mean_rms_ctrl,mean_diff,t_stat,p_value,cohen_d,pct_par_above,best_condition
+Angelique,Dig,1F,30,0.6025,0.5912,0.0114,0.9129,0.3688,0.1667,46.7,False
+Angelique,Dig,20F/A,30,0.5785,0.5792,-0.0007,-0.0608,0.952,-0.0111,46.7,True
+Angelique,Dig,20F/S,29,0.5449,0.5901,-0.0451,-2.5522,0.0164,-0.4739,34.5,False
+Angelique,NumWoGE,1F,30,0.5707,0.5711,-0.0004,-0.0275,0.9782,-0.005,43.3,False
+Angelique,NumWoGE,20F/A,30,0.5722,0.586,-0.0139,-0.8224,0.4176,-0.1502,46.7,False
+Angelique,NumWoGE,20F/S,30,0.5876,0.5827,0.0049,0.3383,0.7376,0.0618,43.3,True
+Talia,Dig,10F/M,15,1.1249,1.0996,0.0252,0.479,0.6393,0.1237,46.7,False
+Talia,Dig,10F/S,15,1.0858,1.1372,-0.0514,-0.6054,0.5546,-0.1563,40.0,False
+Talia,Dig,1F,15,1.1124,1.1432,-0.0308,-0.3387,0.7399,-0.0874,53.3,False
+Talia,Dig,20F/HD,15,1.1056,1.0761,0.0295,0.513,0.616,0.1325,53.3,False

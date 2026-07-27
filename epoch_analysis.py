@@ -1,10 +1,12 @@
 import os, sys, re, gc, warnings
+from math import gcd
 import numpy as np
 import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from scipy.stats import ttest_rel
+from scipy.signal import resample_poly
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.mixture import GaussianMixture
@@ -26,9 +28,12 @@ os.makedirs(OUT_DIR, exist_ok=True)
 
 # constants
 SR              = 512
-STIM_RATE       = 7.5                            
-EPOCH_SAMPLES   = int(round(SR / STIM_RATE)) # 68 samples ~ 133 ms
+STIM_RATE       = 7.5
+# resample to TARGET_SR before epoching
+TARGET_SR       = 480
+EPOCH_SAMPLES   = int(TARGET_SR / STIM_RATE) # makes it 64 samples exactly
 EXCLUDE_SUBJ    = {'S20', 'S30'}
+DS_LABEL        = {'Angelique': 'D1', 'Talia': 'D2'}
 
 # highlighted best conditions
 HIGHLIGHT = {
@@ -54,22 +59,23 @@ def _load_raw_sequences(fpath, n_elec=N_ELEC):
     return result
 
 # epoch computation
-def compute_diff_erp(eeg, epoch_samples=EPOCH_SAMPLES):
-    N, n_elec = eeg.shape
-    n_epochs  = N // epoch_samples
-    # truncate to complete epochs
-    eeg_trunc = eeg[:n_epochs * epoch_samples]
-    # reshape to (n_epochs, epoch_samples, n_elec)
-    epochs    = eeg_trunc.reshape(n_epochs, epoch_samples, n_elec)
+def compute_diff_erp(eeg, fs=SR, target_fs=TARGET_SR, stim_rate=STIM_RATE):
+    # resample so that stim_rate divides target_fs exactly 
+    _g = gcd(int(fs), int(target_fs))
+    up, down = int(target_fs) // _g, int(fs) // _g   # 15, 16
+    eeg_rs = resample_poly(eeg, up, down).astype(np.float32)
 
-    even_idx  = np.arange(0, n_epochs, 2) # 0, 2, 4, ...  (Set A)
-    odd_idx   = np.arange(1, n_epochs, 2) # 1, 3, 5, ...  (Set B)
+    epoch_samples = int(target_fs / stim_rate) # 64
+    N, n_elec     = eeg_rs.shape
+    n_epochs      = N // epoch_samples
+    eeg_trunc     = eeg_rs[:n_epochs * epoch_samples]
+    epochs        = eeg_trunc.reshape(n_epochs, epoch_samples, n_elec)
 
-    mean_even = epochs[even_idx].mean(axis=0) # (epoch_samples, n_elec)
-    mean_odd  = epochs[odd_idx].mean(axis=0)
+    mean_even = epochs[0::2].mean(axis=0) # Set A (positions 0, 2, 4, ...)
+    mean_odd  = epochs[1::2].mean(axis=0) # Set B (positions 1, 3, 5, ...)
 
-    diff_erp  = mean_odd - mean_even # discrimination signal
-    return diff_erp, len(even_idx), len(odd_idx)
+    diff_erp  = mean_odd - mean_even
+    return diff_erp, len(epochs[0::2]), len(epochs[1::2])
 
 def diff_erp_rms(diff_erp):
     """Per-electrode RMS of diff_ERP — scalar discrimination strength."""
@@ -154,7 +160,7 @@ def plot_rms_comparison(df, out_dir):
         sub   = df[(df['dataset'] == ds) & (df['modality'] == mod)]
         ax_v  = axes[ri, 0]
         ax_p  = axes[ri, 1]
-        title = f'{ds} — {mod}'
+        title = f'{DS_LABEL.get(ds, ds)} — {mod}'
 
         for xi, cond in enumerate(['Par', 'Control']):
             vals  = sub[sub['condition'] == cond]['rms_all'].values
@@ -254,7 +260,7 @@ def plot_per_font_rms(df, out_dir):
                     best_condition=best))
 
             star = ' ★' if best else ''
-            ax.set_title(f'{ds} {mod}\n{font}{star}\n{stat_txt}', fontsize=8)
+            ax.set_title(f'{DS_LABEL.get(ds, ds)} {mod}\n{font}{star}\n{stat_txt}', fontsize=8)
             ax.set_xticks([0, 1])
             ax.set_xticklabels(['Par', 'Ctrl'], fontsize=8)
             if ci == 0:
@@ -306,7 +312,7 @@ def plot_diff_erp_waveforms(records, out_dir):
         ax.axhline(0, color='k', lw=0.6, ls='--')
         ax.set_xlabel('Time within epoch (ms)')
         ax.set_ylabel('Amplitude (µV)')
-        ax.set_title(f'{ds} — {mod}')
+        ax.set_title(f'{DS_LABEL.get(ds, ds)} — {mod}')
         ax.legend(fontsize=9)
 
     plt.tight_layout()
@@ -376,7 +382,8 @@ def plot_umap_diff_erp(records, df, out_dir):
                 mask = (df[col_key] == cat).values
                 ax.scatter(emb[mask, 0], emb[mask, 1],
                            c=[cat_colors.get(cat, 'grey')],
-                           alpha=0.5, s=14, label=str(cat), rasterized=True)
+                           alpha=0.5, s=14, label=DS_LABEL.get(str(cat), str(cat)),
+                           rasterized=True)
 
             ax.set_title(f'{col_title}\n({feat_label})', fontsize=9)
             ax.set_xlabel('UMAP 1', fontsize=7)

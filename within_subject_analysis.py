@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from scipy.stats import ttest_1samp
+from scipy.stats import ttest_1samp, wilcoxon
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.mixture import GaussianMixture
@@ -33,6 +33,7 @@ os.makedirs(OUT_DIR, exist_ok=True)
 
 # subjects tha did not pass the data screening
 EXCLUDE = {'S20', 'S30'}
+DS_LABEL = {'Angelique': 'D1', 'Talia': 'D2'}
 
 # helpers
 def _purity(y_true, y_pred):
@@ -42,6 +43,19 @@ def _purity(y_true, y_pred):
         m = y_pred == cl
         total += max(y_true[m].sum(), m.sum() - y_true[m].sum())
     return total / len(y_true)
+
+def empirical_chance_purity(n, n_A=None, n_repeats=2000, seed=RANDOM):
+    """Monte Carlo chance level for purity with k=2, balanced conditions."""
+    rng = np.random.default_rng(seed)
+    if n_A is None:
+        n_A = n // 2
+    labels   = np.array([1] * (n // 2) + [0] * (n - n // 2))
+    clusters = np.array([0] * n_A + [1] * (n - n_A))
+    total = 0.0
+    for _ in range(n_repeats):
+        shuf = rng.permutation(labels)
+        total += _purity(shuf, clusters)
+    return total / n_repeats
 
 def _cluster_and_score(X, y_true, n_components_pca=None):
     """
@@ -107,17 +121,28 @@ def load_erp_data():
 
 # per-subject analysis
 def analyse_snr_per_subject(df_snr):
-    """Run within-subject clustering on all-electrode SNR features."""
+    """Run within-subject clustering on all-electrode SNR features.
+
+    Font x modality demeaning applied identically to the diff-ERP pipeline.
+    """
     rows   = []
-    embeds = {} # (dataset, subject) -> (emb, y_true, dataset, modality)
+    embeds = {}
 
     for (ds, subj), sub in df_snr.groupby(['dataset', 'subject']):
-        flat   = np.stack(sub['flat'].values) # 612-D (all 68 electrodes)
+        flat   = np.stack(sub['flat'].values).astype(np.float64)
         y_true = (sub['condition'] == 'Par').astype(int).values
         mod    = sub['modality'].iloc[0] if sub['modality'].nunique() == 1 else 'Mixed'
 
         if y_true.sum() < 2 or (len(y_true) - y_true.sum()) < 2:
             continue
+
+        # font x modality demean
+        cell_keys = (sub['font_label'] + '|' + sub['modality']).values
+        demeaned  = flat.copy()
+        for cell in np.unique(cell_keys):
+            mask = cell_keys == cell
+            demeaned[mask] -= demeaned[mask].mean(axis=0)
+        flat = demeaned
 
         sc, emb = _cluster_and_score(flat, y_true, n_components_pca=15)
         if sc is None:
@@ -131,7 +156,13 @@ def analyse_snr_per_subject(df_snr):
     return pd.DataFrame(rows), embeds
 
 def analyse_erp_per_subject(records, df_meta):
-    """Run within-subject clustering on occipital diff-ERP features (fully unsupervised)."""
+    """Run within-subject clustering on diff-ERP features (fully unsupervised).
+
+    Font x modality demeaning is applied before clustering: the mean feature
+    vector for each (font_label, modality) cell is subtracted from every
+    sequence in that cell.  This removes between-condition-type variance
+    (font and modality) so that the clustering reflects parity structure only.
+    """
     rows   = []
     embeds = {}
 
@@ -148,6 +179,15 @@ def analyse_erp_per_subject(records, df_meta):
         # full diff-ERP; labels never used here
         occ_ravel = np.stack([r['diff_erp'].ravel() for r in recs_s])
 
+        # font x modality demean (labels not used — font_label and modality
+        # are properties of the stimulus stream, not the condition)
+        cell_keys = np.array([f"{r['font_label']}|{r['modality']}" for r in recs_s])
+        demeaned  = occ_ravel.copy()
+        for cell in np.unique(cell_keys):
+            mask = cell_keys == cell
+            demeaned[mask] -= demeaned[mask].mean(axis=0)
+        occ_ravel = demeaned
+
         sc, emb = _cluster_and_score(occ_ravel, y_true, n_components_pca=10)
         if sc is None:
             continue
@@ -161,9 +201,11 @@ def analyse_erp_per_subject(records, df_meta):
 
 # plots
 def plot_purity_histogram(scores_snr, scores_erp, out_dir):
+    chance_line = empirical_chance_purity(24)
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-    fig.suptitle('Within-subject clustering purity distribution\n'
-                 'Dashed line = chance (0.5)', fontsize=12, fontweight='bold')
+    fig.suptitle(f'Within-subject clustering purity distribution\n'
+                 f'Dashed line = empirical chance (n=24: {chance_line:.3f})',
+                 fontsize=12, fontweight='bold')
 
     for ax, df, title in [
         (axes[0], scores_snr, 'SNR features (freq domain)'),
@@ -176,7 +218,8 @@ def plot_purity_histogram(scores_snr, scores_erp, out_dir):
             ax.axvline(df[col].mean(), color=color, lw=2, ls='--',
                        label=f'{name.upper()} mean={df[col].mean():.3f}')
 
-        ax.axvline(0.5, color='black', lw=1.5, ls=':', label='chance')
+        ax.axvline(chance_line, color='black', lw=1.5, ls=':',
+                   label=f'empirical chance ({chance_line:.3f})')
         ax.set_xlabel('Purity')
         ax.set_ylabel('# subjects')
         ax.set_title(title, fontsize=10)
@@ -191,6 +234,7 @@ def plot_purity_histogram(scores_snr, scores_erp, out_dir):
 
 def plot_purity_by_group(scores_snr, scores_erp, out_dir):
     """Bar chart of mean GMM purity per (dataset, modality)."""
+    chance_24 = empirical_chance_purity(24)
     combined = pd.concat([
         scores_snr.assign(feature_type='SNR'),
         scores_erp.assign(feature_type='diff-ERP'),
@@ -205,19 +249,20 @@ def plot_purity_by_group(scores_snr, scores_erp, out_dir):
         grp = sub.groupby(['dataset', 'modality'])
         labels, means, sems, ns = [], [], [], []
         for (ds, mod), g in grp:
-            labels.append(f'{ds}\n{mod}')
+            labels.append(f'{DS_LABEL.get(ds, ds)}\n{mod}')
             means.append(g['purity_gmm'].mean())
             sems.append(g['purity_gmm'].sem())
             ns.append(len(g))
 
         x = np.arange(len(labels))
         bars = ax.bar(x, means, yerr=sems, capsize=4,
-                      color=['#D6604D' if 'Ang' in l else '#4393C3' for l in labels],
+                      color=['#D6604D' if 'D1' in l else '#4393C3' for l in labels],
                       alpha=0.75, edgecolor='grey')
         for xi, (m, n) in enumerate(zip(means, ns)):
             ax.text(xi, m + sems[xi] + 0.01, f'n={n}', ha='center',
                     fontsize=8, va='bottom')
-        ax.axhline(0.5, color='black', lw=1, ls='--', label='chance')
+        ax.axhline(chance_24, color='black', lw=1, ls='--',
+                   label=f'empirical chance ({chance_24:.3f})')
         ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=9)
         ax.set_ylabel('GMM purity'); ax.set_ylim(0, 1)
         ax.set_title(ft)
@@ -261,7 +306,7 @@ def plot_umap_grid(embeds, scores_df, feature_name, out_dir):
             ax.scatter(emb[m, 0], emb[m, 1], c=color, s=22, alpha=0.7,
                        label=cond, rasterized=True)
 
-        ax.set_title(f'{subj}  {ds[:3]}/{mod[:3]}\n'
+        ax.set_title(f'{subj}  {DS_LABEL.get(ds, ds)}/{mod[:3]}\n'
                      f'pur={row.purity_gmm:.2f}  sil={row.silhouette:.2f}',
                      fontsize=7)
         ax.set_xticks([]); ax.set_yticks([])
@@ -316,7 +361,7 @@ def plot_best_subjects(embeds_snr, embeds_erp, scores_snr, scores_erp, out_dir,
                 ax.scatter(emb[m, 0], emb[m, 1], c=color, s=35, alpha=0.8,
                            label=cond, rasterized=True)
 
-            ax.set_title(f'{subj} [{ds_[:3]}/{mod}]  {label}\n'
+            ax.set_title(f'{subj} [{DS_LABEL.get(ds_, ds_)}/{mod}]  {label}\n'
                          f'purity={row.purity_gmm:.3f}  sil={row.silhouette:.3f}  '
                          f'ARI={row.ari_gmm:.3f}',
                          fontsize=8)
@@ -346,10 +391,11 @@ def plot_scatter_purity_vs_purity(scores_snr, scores_erp, out_dir):
         m = merged['dataset'] == ds
         ax.scatter(merged.loc[m, 'purity_gmm_snr'],
                    merged.loc[m, 'purity_gmm_erp'],
-                   c=color, alpha=0.7, s=45, label=ds, zorder=4)
+                   c=color, alpha=0.7, s=45, label=DS_LABEL.get(ds, ds), zorder=4)
 
-    ax.axhline(0.5, color='grey', lw=0.8, ls='--')
-    ax.axvline(0.5, color='grey', lw=0.8, ls='--')
+    chance_24 = empirical_chance_purity(24)
+    ax.axhline(chance_24, color='grey', lw=0.8, ls='--')
+    ax.axvline(chance_24, color='grey', lw=0.8, ls='--')
     ax.plot([0, 1], [0, 1], 'k--', lw=0.8, alpha=0.4, label='identity')
 
     corr = merged['purity_gmm_snr'].corr(merged['purity_gmm_erp'])
@@ -448,9 +494,10 @@ def breakdown_by_font(df_snr, records_erp, df_erp_meta):
 
 def plot_modality_breakdown(rows_snr, rows_erp, out_dir):
     """Bar chart: mean purity per (dataset x modality) for SNR and diff-ERP."""
+    chance_12 = empirical_chance_purity(12)
     fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
-    fig.suptitle('Within-subject purity by modality\n'
-                 'Error bars = ±1 SEM;  dashed = chance (0.5)',
+    fig.suptitle(f'Within-subject purity by modality\n'
+                 f'Error bars = ±1 SEM;  dashed = empirical chance (n=12: {chance_12:.3f})',
                  fontsize=12, fontweight='bold')
 
     palette = {'Dig': '#4393C3', 'NumWoGE': '#D6604D', 'Mixed': '#888888'}
@@ -458,7 +505,7 @@ def plot_modality_breakdown(rows_snr, rows_erp, out_dir):
     for ax, df, title in [(axes[0], rows_snr, 'SNR (freq domain)'),
                           (axes[1], rows_erp, 'diff-ERP (time domain)')]:
         grps   = df.groupby(['dataset', 'modality'])
-        labels = [f'{ds}\n{mod}' for (ds, mod), _ in grps]
+        labels = [f'{DS_LABEL.get(ds, ds)}\n{mod}' for (ds, mod), _ in grps]
         means  = [g['purity_gmm'].mean() for _, g in grps]
         sems   = [g['purity_gmm'].sem()  for _, g in grps]
         colors = [palette.get(mod, '#888') for (_, mod), _ in grps]
@@ -469,12 +516,14 @@ def plot_modality_breakdown(rows_snr, rows_erp, out_dir):
                edgecolor='grey')
         grp_list = list(grps)
         for xi, (m, s, n) in enumerate(zip(means, sems, ns)):
-            t, p = ttest_1samp(grp_list[xi][1]['purity_gmm'].values, 0.5)
+            diffs = grp_list[xi][1]['purity_gmm'].values - chance_12
+            t, p  = ttest_1samp(diffs, 0.0)
             sig = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else 'ns'
             ax.text(xi, m + s + 0.01, f'n={n}\n{sig}', ha='center',
                     fontsize=8, va='bottom')
 
-        ax.axhline(0.5, color='black', lw=1.2, ls='--', label='chance')
+        ax.axhline(chance_12, color='black', lw=1.2, ls='--',
+                   label=f'empirical chance ({chance_12:.3f})')
         ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=9)
         ax.set_ylabel('GMM purity'); ax.set_ylim(0.3, 1.0)
         ax.set_title(title, fontsize=10)
@@ -489,13 +538,20 @@ def plot_modality_breakdown(rows_snr, rows_erp, out_dir):
 def plot_font_heatmap(font_snr, font_erp, out_dir):
     """
     Heatmap: rows = (dataset x modality), cols = font condition.
-    Cell = mean KMeans purity across subjects.
-    Two heatmaps side by side: SNR and diff-ERP.
+    Color = (purity - empirical_chance) / (1 - empirical_chance),
+    i.e. normalised excess above empirical chance per cell size.
+    0 = at chance (white), 1 = perfect (dark green).
     """
+    # per-row empirical chance: D1 cells have n=4 (n_A=1), D2 cells have n=6
+    chance_map = {'Angelique': empirical_chance_purity(4, n_A=1),
+                  'Talia':     empirical_chance_purity(6)}
+
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
-    fig.suptitle('Within-subject KMeans purity by font condition\n'
-                 '(PCA -> KMeans, ~4–6 seqs per cell); chance = 0.50',
-                 fontsize=12, fontweight='bold')
+    fig.suptitle(
+        'Within-subject KMeans purity by font condition\n'
+        'Colour = excess above empirical chance, normalised to [0, 1]  '
+        '(D1 chance~0.75, D2 chance~0.70)',
+        fontsize=11, fontweight='bold')
 
     for ax, df, title in [(axes[0], font_snr, 'SNR (freq domain)'),
                           (axes[1], font_erp, 'diff-ERP (time domain)')]:
@@ -504,36 +560,46 @@ def plot_font_heatmap(font_snr, font_erp, out_dir):
                    .reset_index()
                    .pivot(index=['dataset', 'modality'], columns='font',
                           values='purity_kmeans'))
-
-        # count ns for annotation
         ns = (df.groupby(['dataset', 'modality', 'font'])['purity_kmeans']
                 .count()
                 .reset_index()
                 .pivot(index=['dataset', 'modality'], columns='font',
                        values='purity_kmeans'))
 
-        im = ax.imshow(pivot.values, vmin=0.4, vmax=0.8, cmap='RdYlGn',
-                       aspect='auto')
-        plt.colorbar(im, ax=ax, label='mean purity')
+        # normalise each row by its empirical chance
+        norm_vals = np.full_like(pivot.values, np.nan, dtype=float)
+        for ri, (ds, mod) in enumerate(pivot.index):
+            ch = chance_map.get(ds, empirical_chance_purity(6))
+            row = pivot.values[ri].astype(float)
+            norm_vals[ri] = np.where(np.isnan(row), np.nan,
+                                     (row - ch) / (1.0 - ch))
+
+        im = ax.imshow(norm_vals, vmin=0.0, vmax=1.0, cmap='YlGn', aspect='auto')
+        cbar = plt.colorbar(im, ax=ax)
+        cbar.set_label('normalised excess above chance')
+        cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
+        cbar.set_ticklabels(['0 (chance)', '0.25', '0.50', '0.75', '1.0 (perfect)'])
 
         ax.set_xticks(range(pivot.shape[1]))
-        ax.set_xticklabels(pivot.columns.tolist(), rotation=30, ha='right',
-                           fontsize=9)
-        ylabels = [f'{ds[:3]} {mod[:6]}' for ds, mod in pivot.index]
+        ax.set_xticklabels(pivot.columns.tolist(), rotation=30, ha='right', fontsize=9)
+        ylabels = [f'{DS_LABEL.get(ds, ds)} {mod[:6]}' for ds, mod in pivot.index]
         ax.set_yticks(range(pivot.shape[0]))
         ax.set_yticklabels(ylabels, fontsize=9)
 
-        # annotate cells
         for ri in range(pivot.shape[0]):
             for ci in range(pivot.shape[1]):
-                v = pivot.values[ri, ci]
-                n = ns.values[ri, ci] if not np.isnan(ns.values[ri, ci]) else 0
+                v    = pivot.values[ri, ci]
+                nv   = norm_vals[ri, ci]
+                n    = ns.values[ri, ci] if not np.isnan(ns.values[ri, ci]) else 0
                 if not np.isnan(v):
+                    txt_color = 'white' if (not np.isnan(nv) and nv > 0.6) else 'black'
                     ax.text(ci, ri, f'{v:.2f}\n(n={int(n)})',
-                            ha='center', va='center', fontsize=7,
-                            color='black' if 0.45 < v < 0.75 else 'white')
+                            ha='center', va='center', fontsize=7, color=txt_color)
 
-        ax.axhline(0.5, color='white', lw=0.3)
+        # separator between D1 and D2 rows
+        n_d1 = sum(1 for ds, _ in pivot.index if ds == 'Angelique')
+        if 0 < n_d1 < pivot.shape[0]:
+            ax.axhline(n_d1 - 0.5, color='white', lw=1.5)
         ax.set_title(title, fontsize=10)
 
     plt.tight_layout()
@@ -543,29 +609,66 @@ def plot_font_heatmap(font_snr, font_erp, out_dir):
     print(f'Saved {out}')
 
 def print_breakdown_summary(mod_snr, mod_erp, font_snr, font_erp):
+    # Empirical chance for the modality split (12 seqs per modality) and font cells (4 or 6 seqs)
+    chance_12 = empirical_chance_purity(12)
+    chance_6  = empirical_chance_purity(6)
+    chance_4  = empirical_chance_purity(4, n_A=1)
+    print(f'\nEmpirical chance: n=12→{chance_12:.3f}  n=6→{chance_6:.3f}  n=4(n_A=1)→{chance_4:.3f}')
+
     print('\n' + '=' * 70)
-    print('MODALITY BREAKDOWN')
+    print('MODALITY BREAKDOWN  [vs empirical chance for n=12]')
     print('=' * 70)
     for label, df in [('SNR', mod_snr), ('diff-ERP', mod_erp)]:
         print(f'\n  {label}:')
         for (ds, mod), g in df.groupby(['dataset', 'modality']):
-            t, p = ttest_1samp(g['purity_gmm'].values, 0.5)
-            sig  = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else 'ns'
+            diffs = g['purity_gmm'].values - chance_12
+            t, p  = ttest_1samp(diffs, 0.0)
+            sig   = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else 'ns'
             print(f'    {ds:10} {mod:8}  n={len(g):2}  '
                   f'mean={g["purity_gmm"].mean():.3f}  sd={g["purity_gmm"].std():.3f}  '
                   f't={t:+.2f}  p={p:.3f}  {sig}')
 
     print('\n' + '=' * 70)
-    print('FONT BREAKDOWN  (KMeans purity, mean across subjects)')
+    print('FONT BREAKDOWN — cross-font paired contrasts (Wilcoxon signed-rank)')
+    print(f'  Empirical chance per cell: n=6→{chance_6:.3f}  n=4(n_A=1)→{chance_4:.3f}')
+    print(f'  Absolute cell means shown for reference; significance from paired differences')
     print('=' * 70)
     for label, df in [('SNR', font_snr), ('diff-ERP', font_erp)]:
         print(f'\n  {label}:')
+
         grp = df.groupby(['dataset', 'modality', 'font'])['purity_kmeans']
         for (ds, mod, font), g in grp:
-            t, p = ttest_1samp(g.values, 0.5)
-            sig  = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.05 else 'ns'
-            print(f'    {ds:10} {mod:8} {font:8}  n={len(g):2}  '
-                  f'mean={g.mean():.3f}  t={t:+.2f}  p={p:.3f}  {sig}')
+            print(f'    {DS_LABEL.get(ds,ds):3} {mod:8} {font:8}  '
+                  f'n={int(g.count()):2}  mean={g.mean():.3f}')
+
+        # Paired cross-font contrasts
+        print(f'\n    Paired contrasts (Wilcoxon; Bonferroni α=0.05/3=0.017):')
+        for (ds, mod), sub in df.groupby(['dataset', 'modality']):
+            fonts = sorted(sub['font'].unique())
+            # pivot: rows=subject, cols=font
+            pivot = sub.pivot_table(index='subject', columns='font',
+                                    values='purity_kmeans')
+            ref_font = '1F' if '1F' in pivot.columns else fonts[0]
+            comparisons = [(f, ref_font) for f in fonts if f != ref_font]
+            # also add 20F/A vs 20F/S if both exist
+            if '20F/A' in pivot.columns and '20F/S' in pivot.columns:
+                comparisons.append(('20F/A', '20F/S'))
+            for fa, fb in comparisons:
+                if fa not in pivot.columns or fb not in pivot.columns:
+                    continue
+                both = pivot[[fa, fb]].dropna()
+                if len(both) < 4:
+                    continue
+                diff = both[fa].values - both[fb].values
+                if (diff == 0).all():
+                    print(f'      {DS_LABEL.get(ds,ds)} {mod:8}: '
+                          f'{fa} − {fb}  all ties, skipped')
+                    continue
+                stat, p = wilcoxon(diff, alternative='two-sided')
+                sig = '***' if p < 0.001 else '**' if p < 0.01 else '*' if p < 0.017 else 'ns'
+                print(f'      {DS_LABEL.get(ds,ds)} {mod:8}: '
+                      f'{fa} − {fb}  W={stat:.0f}  p={p:.3f}  {sig}  '
+                      f'(Δ={diff.mean():+.3f})')
 
 # summary stats
 def print_summary(scores_snr, scores_erp):
@@ -573,25 +676,44 @@ def print_summary(scores_snr, scores_erp):
     print('WITHIN-SUBJECT CLUSTERING SUMMARY')
     print('=' * 70)
 
+    # Empirical chance for typical n (most subjects have 24 sequences)
+    # Reported alongside so we can see margin above empirical chance
+    typical_n   = 24
+    chance_24   = empirical_chance_purity(typical_n)
+    chance_12   = empirical_chance_purity(12)   # per-modality split in D1
+    print(f'\nEmpirical chance level  n=24: {chance_24:.4f}  n=12: {chance_12:.4f}')
+
     for label, df in [('SNR features (freq domain)', scores_snr),
                       ('diff-ERP (time domain — fully unsupervised)', scores_erp)]:
         print(f'\n{label}')
         for col in ['purity_gmm', 'purity_kmeans', 'silhouette', 'ari_gmm']:
             vals = df[col].values
-            t, p = ttest_1samp(vals, 0.5 if 'purity' in col else 0.0)
-            print(f'  {col:20} mean={vals.mean():.3f}  sd={vals.std():.3f}  '
-                  f'  t={t:+.2f}  p={p:.3f}')
+            if 'purity' in col:
+                # use per-row empirical chance keyed by n_seq
+                row_chance = df['n_seq'].apply(empirical_chance_purity).values
+                diffs = vals - row_chance
+                t, p  = ttest_1samp(diffs, 0.0)
+                print(f'  {col:20} mean={vals.mean():.3f}  sd={vals.std():.3f}  '
+                      f'chance≈{row_chance.mean():.3f}  margin={diffs.mean():+.3f}  '
+                      f't={t:+.2f}  p={p:.4f}')
+            else:
+                t, p = ttest_1samp(vals, 0.0)
+                print(f'  {col:20} mean={vals.mean():.3f}  sd={vals.std():.3f}  '
+                      f't={t:+.2f}  p={p:.4f}')
+
         above = (df['purity_gmm'] > 0.60).mean() * 100
         print(f'  % subjects purity_gmm > 0.60 : {above:.1f}%')
         above70 = (df['purity_gmm'] > 0.70).mean() * 100
         print(f'  % subjects purity_gmm > 0.70 : {above70:.1f}%')
 
-        print(f'\n  Per (dataset x modality):')
+        print(f'\n  Per (dataset x modality) [vs empirical chance]:')
         for (ds, mod), g in df.groupby(['dataset', 'modality']):
-            t2, p2 = ttest_1samp(g['purity_gmm'].values, 0.5)
+            row_ch = g['n_seq'].apply(empirical_chance_purity).values
+            diffs  = g['purity_gmm'].values - row_ch
+            t2, p2 = ttest_1samp(diffs, 0.0)
             print(f'    {ds:10} {mod:8}  n={len(g):2}  '
-                  f'mean={g["purity_gmm"].mean():.3f}  '
-                  f't={t2:+.2f}  p={p2:.3f}')
+                  f'mean={g["purity_gmm"].mean():.3f}  chance≈{row_ch.mean():.3f}  '
+                  f't={t2:+.2f}  p={p2:.4f}')
 
 
 def main():
