@@ -121,10 +121,7 @@ def load_erp_data():
 
 # per-subject analysis
 def analyse_snr_per_subject(df_snr):
-    """Run within-subject clustering on all-electrode SNR features.
-
-    Font x modality demeaning applied identically to the diff-ERP pipeline.
-    """
+    """Run within-subject clustering on all-electrode SNR features."""
     rows   = []
     embeds = {}
 
@@ -135,14 +132,6 @@ def analyse_snr_per_subject(df_snr):
 
         if y_true.sum() < 2 or (len(y_true) - y_true.sum()) < 2:
             continue
-
-        # font x modality demean
-        cell_keys = (sub['font_label'] + '|' + sub['modality']).values
-        demeaned  = flat.copy()
-        for cell in np.unique(cell_keys):
-            mask = cell_keys == cell
-            demeaned[mask] -= demeaned[mask].mean(axis=0)
-        flat = demeaned
 
         sc, emb = _cluster_and_score(flat, y_true, n_components_pca=15)
         if sc is None:
@@ -156,13 +145,7 @@ def analyse_snr_per_subject(df_snr):
     return pd.DataFrame(rows), embeds
 
 def analyse_erp_per_subject(records, df_meta):
-    """Run within-subject clustering on diff-ERP features (fully unsupervised).
-
-    Font x modality demeaning is applied before clustering: the mean feature
-    vector for each (font_label, modality) cell is subtracted from every
-    sequence in that cell.  This removes between-condition-type variance
-    (font and modality) so that the clustering reflects parity structure only.
-    """
+    """Run within-subject clustering on diff-ERP features (fully unsupervised)."""
     rows   = []
     embeds = {}
 
@@ -178,15 +161,6 @@ def analyse_erp_per_subject(records, df_meta):
 
         # full diff-ERP; labels never used here
         occ_ravel = np.stack([r['diff_erp'].ravel() for r in recs_s])
-
-        # font x modality demean (labels not used — font_label and modality
-        # are properties of the stimulus stream, not the condition)
-        cell_keys = np.array([f"{r['font_label']}|{r['modality']}" for r in recs_s])
-        demeaned  = occ_ravel.copy()
-        for cell in np.unique(cell_keys):
-            mask = cell_keys == cell
-            demeaned[mask] -= demeaned[mask].mean(axis=0)
-        occ_ravel = demeaned
 
         sc, emb = _cluster_and_score(occ_ravel, y_true, n_components_pca=10)
         if sc is None:
