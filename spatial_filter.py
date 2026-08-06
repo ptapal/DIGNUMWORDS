@@ -55,7 +55,7 @@ from block_level_test import (enumerate_stratified, signed_stat, bh_fdr,
 from electrodes import RETTER_ROI_IDX, biosemi_68_order
 
 CACHE  = 'h5_new/spatial_cache.npz'
-SHRINK = 0.05 # ridge on Sigma_noise; 68x68 from finite epochs needs it
+SHRINK = 0.05 
 
 
 # epoching
@@ -75,7 +75,7 @@ def _sequence_stats(eeg):
 
     # discrimination contrast: pairs of adjacent epochs, set A minus set B
     n_pair = ep.shape[0] // 2
-    d = ep[1:2 * n_pair:2] - ep[0:2 * n_pair:2]          # (n_pair, T, 68)
+    d = ep[1:2 * n_pair:2] - ep[0:2 * n_pair:2]           # (n_pair, T, 68)
     D = d.mean(axis=0)                                    # the diff-ERP
     Cn_d = np.einsum('itc,itd->cd', d, d) / (len(d) * T)  # single-pair covariance
 
@@ -90,9 +90,6 @@ def _sequence_stats(eeg):
 # the filter
 def max_snr_filter(D_train, Cn_train, shrink=SHRINK):
     """Leading max-SNR spatial filter and its interpretable pattern.
-
-    D_train  (T, 68)   averaged response over the training blocks
-    Cn_train (68, 68)  mean single-epoch covariance over the training blocks
     """
     Cs = D_train.T @ D_train / D_train.shape[0]
     Cn = Cn_train + shrink * np.trace(Cn_train) / N_ELEC * np.eye(N_ELEC)
@@ -157,13 +154,12 @@ def load_cache(path=CACHE):
 # analysis
 def block_scores(meta, D, M, Cd, Cm, exclude, pooled=False):
     """Reduce every block to four numbers: {learned, ROI} x {diff, mean}."""
-    meta = meta[~meta.subject.isin(exclude)].reset_index(drop=True)
+    meta = meta[~meta.subject.isin(exclude)]
     out, patterns = [], []
 
     for (ds, subj), g in meta.groupby(['dataset', 'subject']):
         blocks = list(g.groupby('block_id'))
-        # average the sequences inside each block first -- sequences within a
-        # block are not independent observations
+        # average the sequences inside each block first
         bD = {b: D[gg.index].mean(0) for b, gg in blocks}
         bM = {b: M[gg.index].mean(0) for b, gg in blocks}
         bCd = {b: Cd[gg.index].mean(0) for b, gg in blocks}
@@ -186,8 +182,9 @@ def block_scores(meta, D, M, Cd, Cm, exclude, pooled=False):
                 y=1 if r.condition == 'Par' else 0,
                 learned_diff=_rms(bD[b] @ wd),
                 learned_mean=_rms(bM[b] @ wm),
-                roi_diff=_rms(bD[b][:, RETTER_ROI_IDX]),
-                roi_mean=_rms(bM[b][:, RETTER_ROI_IDX]),
+                # average the 8 ROI channels into one timecourse
+                roi_diff=_rms(bD[b][:, RETTER_ROI_IDX].mean(axis=1)),
+                roi_mean=_rms(bM[b][:, RETTER_ROI_IDX].mean(axis=1)),
                 eig=snr_d))
             patterns.append(dict(dataset=ds, subject=subj, block_id=b,
                                  **{biosemi_68_order[i]: pat_d[i]

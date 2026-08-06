@@ -33,14 +33,29 @@ def _snr_mat(flat):
 
 
 def _rms(erp2d, cols=None):
-    """RMS over time (and over `cols` electrodes if given)."""
-    x = erp2d if cols is None else erp2d[:, cols]
-    return float(np.sqrt((np.asarray(x, dtype=np.float64) ** 2).mean()))
+    """RMS over time. With `cols`, the channels are first averaged into a
+    single timecourse -- that is the field-standard ROI summary (Retter et al.
+    average their 8 channels). Taking an RMS across channels instead would not
+    cancel opposite polarities and is a different quantity."""
+    x = np.asarray(erp2d, dtype=np.float64)
+    if cols is not None:
+        x = x[:, cols].mean(axis=1)
+    return float(np.sqrt((x ** 2).mean()))
 
 
 def _rms_per_elec(erp2d):
     """(time, 68) -> (68,) RMS over time at each electrode."""
     return np.sqrt((np.asarray(erp2d, dtype=np.float64) ** 2).mean(axis=0))
+
+
+def _rms_per_time(erp2d):
+    """(time, 68) -> (time,) RMS across electrodes at each sample.
+
+    The temporal mirror of _rms_per_elec: 64 tests over latency instead of
+    68 over scalp position, so the two margins of the spatiotemporal pattern
+    are examined the same way.
+    """
+    return np.sqrt((np.asarray(erp2d, dtype=np.float64) ** 2).mean(axis=1))
 
 
 # each extractor maps one sequence to a 1-D vector
@@ -63,6 +78,8 @@ EXTRACT_ERP = {
     'erpmean_elec':   lambda r: _rms_per_elec(r['mean_erp']),
     'erp_ratio_elec': lambda r: _rms_per_elec(r['diff_erp']) /
                                 (_rms_per_elec(r['mean_erp']) + 1e-12),
+    'erp_time':       lambda r: _rms_per_time(r['diff_erp']),
+    'erpmean_time':   lambda r: _rms_per_time(r['mean_erp']),
 }
 
 FEATURES = {
@@ -79,6 +96,8 @@ FEATURES = {
     'erpmean':        dict(source='erp', extract='erpmean_full',   stat='energy'),
     'erpmean_roi':    dict(source='erp', extract='erpmean_roi',    stat='signed'),
     'erpmean_elec':   dict(source='erp', extract='erpmean_elec',   stat='localize'),
+    'erp_time':       dict(source='erp', extract='erp_time',       stat='localize'),
+    'erpmean_time':   dict(source='erp', extract='erpmean_time',   stat='localize'),
 }
 
 
@@ -182,7 +201,13 @@ def load_blocks(feature, exclude):
         df = pd.DataFrame([{k: v for k, v in r.items()
                             if k not in ('diff_erp', 'mean_erp')} for r in recs])
         fn = EXTRACT_ERP[spec['extract']]
-        df['vec'] = [fn(r) for r in recs]
+        # Keep the raw waveforms. The extractor runs AFTER block averaging,
+        # because RMS(mean of sequences) != mean of per-sequence RMS, and only
+        # the first cancels noise. Extracting per sequence and averaging the
+        # scalars leaves each sequence's noise floor inside the measure.
+        raw = [{'diff_erp': r['diff_erp'], 'mean_erp': r['mean_erp']}
+               for r in recs]
+        df['vec'] = None
 
     out = {}
     for (ds, subj), sub in df.groupby(['dataset', 'subject']):
@@ -190,7 +215,12 @@ def load_blocks(feature, exclude):
         for _, g in sub.groupby('block_id'):
             conds = set(g['condition'])
             assert len(conds) == 1, f'{ds}/{subj}: a block spans {conds}'
-            rows.append(np.stack(g['vec'].values).mean(axis=0))
+            if spec['source'] == 'erp':
+                blk = {k: np.mean([raw[i][k] for i in g.index], axis=0)
+                       for k in ('diff_erp', 'mean_erp')}
+                rows.append(np.atleast_1d(fn(blk)))
+            else:
+                rows.append(np.stack(g['vec'].values).mean(axis=0))
             labs.append(1 if g['condition'].iloc[0] == 'Par' else 0)
             strata.append(f"{g['modality'].iloc[0]}|{g['font_label'].iloc[0]}")
         out[(ds, subj)] = (np.stack(rows), np.array(labs), np.array(strata))
@@ -208,9 +238,10 @@ def run_localize(blocks, feature, tag):
         for e in range(Xb.shape[1]):
             _, p, _, z, _, _ = enumerate_stratified(
                 lambda m, v=Xb[:, e]: signed_stat(v, m), y, strata)
+            name = (biosemi_68_order[e] if Xb.shape[1] == len(biosemi_68_order)
+                    else f't{e:02d}')
             rows.append(dict(dataset=ds, subject=subj, elec_idx=e,
-                             elec=biosemi_68_order[e],
-                             z=round(z, 4), p=round(p, 5)))
+                             elec=name, z=round(z, 4), p=round(p, 5)))
 
     r   = pd.DataFrame(rows)
     out = f'{OUT_DIR}/block_localize_{feature}{tag}.csv'
@@ -230,16 +261,20 @@ def run_localize(blocks, feature, tag):
         res = pd.DataFrame({'dataset': ds, 'elec': piv.columns,
                             'z': piv.mean().values, 't': t.values,
                             'p': pv, 'q': bh_fdr(pv)})
-        res['elec_idx'] = [biosemi_68_order.index(e) for e in res['elec']]
+        res['elec_idx'] = [biosemi_68_order.index(e) if e in biosemi_68_order
+                           else int(e[1:]) for e in res['elec']]
         summaries.append(res)
 
-        roi = res.set_index('elec').loc[RETTER_ROI]
-        print(f'\n  {DS_LABEL.get(ds, ds)}  (n={n} subjects, 68 electrodes, BH-FDR)')
-        print(f'    electrodes with q<.05:            {(res.q < .05).sum()}/68')
-        print(f'    of the 8 Retter ROI channels:     {(roi.q < .05).sum()}/8')
-        print(f'    mean z over ROI = {roi.z.mean():+.3f}   '
-              f'mean z over the other 60 = '
-              f'{res[~res.elec.isin(RETTER_ROI)].z.mean():+.3f}')
+        is_elec = set(RETTER_ROI).issubset(set(res['elec']))
+        m = len(res)
+        print(f'\n  {DS_LABEL.get(ds, ds)}  (n={n} subjects, {m} tests, BH-FDR)')
+        print(f'    surviving q<.05:                  {(res.q < .05).sum()}/{m}')
+        if is_elec:
+            roi = res.set_index('elec').loc[RETTER_ROI]
+            print(f'    of the 8 Retter ROI channels:     {(roi.q < .05).sum()}/8')
+            print(f'    mean z over ROI = {roi.z.mean():+.3f}   '
+                  f'mean z over the other 60 = '
+                  f'{res[~res.elec.isin(RETTER_ROI)].z.mean():+.3f}')
         print('\n' + res.sort_values('t', ascending=False)
                         .head(12)[['elec', 'z', 't', 'p', 'q']]
                         .round(4).to_string(index=False))
