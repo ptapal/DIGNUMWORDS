@@ -17,7 +17,7 @@ warnings.filterwarnings('ignore')
 sys.path.insert(0, os.path.dirname(__file__))
 from rebuild_seqlevel import (
     parse_angelique_fname, parse_talia_fname,
-    _get_talia_files, N_ELEC, RANDOM, COND_COLORS,
+    _get_talia_files, load_sequences, N_ELEC, RANDOM, COND_COLORS,
 )
 
 # paths
@@ -41,22 +41,10 @@ HIGHLIGHT = {
     ('Angelique', 'NumWoGE', '20F/S'): True,
 }
 
-# CSV loader
-def _load_raw_sequences(fpath, n_elec=N_ELEC):
-    """
-    Load raw EEG CSV -> dict {cond_idx: ndarray (N, n_elec)}.
-    CSV columns: time, channel, condition, value
-    """
-    df = pd.read_csv(fpath, dtype={'time': np.int32, 'channel': np.int8,
-                                   'condition': np.int8, 'value': np.float32})
-    result = {}
-    for cond_idx in sorted(df['condition'].unique()):
-        sub = df[df['condition'] == cond_idx]
-        pivoted = (sub.pivot(index='time', columns='channel', values='value')
-                      .values[:, :n_elec])
-        result[int(cond_idx)] = pivoted.astype(np.float32)
-    del df; gc.collect()
-    return result
+# CSV loading now lives in rebuild_seqlevel.load_sequences, which dispatches on
+# dataset (the two exports use different value layouts) and verifies temporal
+# ordering. Keeping one loader means the SNR and diff-ERP branches cannot
+# silently diverge.
 
 # epoch computation
 def compute_diff_erp(eeg, fs=SR, target_fs=TARGET_SR, stim_rate=STIM_RATE):
@@ -75,7 +63,8 @@ def compute_diff_erp(eeg, fs=SR, target_fs=TARGET_SR, stim_rate=STIM_RATE):
     mean_odd  = epochs[1::2].mean(axis=0) # Set B (positions 1, 3, 5, ...)
 
     diff_erp  = mean_odd - mean_even
-    return diff_erp, len(epochs[0::2]), len(epochs[1::2])
+    mean_erp  = 0.5 * (mean_odd + mean_even)   
+    return diff_erp, mean_erp, len(epochs[0::2]), len(epochs[1::2])
 
 def diff_erp_rms(diff_erp):
     """Per-electrode RMS of diff_ERP — scalar discrimination strength."""
@@ -108,13 +97,13 @@ def build_records(csv_dir, parse_fn, get_files_fn, dataset_name,
             continue
 
         try:
-            seq_data = _load_raw_sequences(fpath)
+            seq_data = load_sequences(fpath, dataset_name)
         except Exception as e:
             print(f'  SKIP {fname}: {e}')
             continue
 
         for seq_i, eeg in seq_data.items():
-            diff_erp, ne, no = compute_diff_erp(eeg)
+            diff_erp, mean_erp, ne, no = compute_diff_erp(eeg)
 
             rms_all = diff_erp_rms(diff_erp).mean()
 
@@ -133,8 +122,10 @@ def build_records(csv_dir, parse_fn, get_files_fn, dataset_name,
                 specific_font = sfont,
                 font_label  = font_label,
                 condition   = cond,
+                block_id    = fname,
                 seq_idx     = seq_counts[k] - 1,
                 diff_erp    = diff_erp.astype(np.float32),
+                mean_erp    = mean_erp.astype(np.float32),
                 rms_all     = float(rms_all),
                 n_even_epochs = ne,
                 n_odd_epochs  = no,
@@ -375,7 +366,8 @@ def plot_umap_diff_erp(records, df, out_dir):
             if cmap_dict:
                 cat_colors = cmap_dict
             else:
-                pal = plt.cm.get_cmap('tab20', max(len(cats), 1))
+                # matplotlib >= 3.9 removed cm.get_cmap
+                pal = matplotlib.colormaps['tab20'].resampled(max(len(cats), 1))
                 cat_colors = {c: pal(i) for i, c in enumerate(cats)}
 
             for cat in cats:
@@ -509,7 +501,7 @@ def main():
     records = rec_ang + rec_tal
 
     # build flat df for groupby operations
-    df = pd.DataFrame([{k: v for k, v in r.items() if k != 'diff_erp'}
+    df = pd.DataFrame([{k: v for k, v in r.items() if k not in ('diff_erp', 'mean_erp')}
                        for r in records])
 
     print(f'\nTotal sequences: {len(df)}')

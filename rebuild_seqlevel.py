@@ -106,6 +106,61 @@ def _pivot_csv(fpath, n_elec=N_ELEC):
     del df; gc.collect()
     return result
 
+def _load_talia_csv(fpath, n_elec=N_ELEC):
+    """
+    D2 export bug: the `value` column is laid out (sequence, channel, time)
+    while the time/channel/condition label columns were written for
+    (time, channel, sequence). Pivoting on the labels therefore reads samples
+    out of order -- lag-1 autocorrelation 0.10 instead of 0.99 -- which whitens
+    the spectrum and destroys the periodic response entirely (SNR at 7.5 Hz
+    over the occipitotemporal ROI: 0.88 mislabelled vs ~4 reconstructed).
+    Reconstruct from the raw value order instead of the labels.
+    """
+    df = pd.read_csv(fpath, dtype={'time': np.int32, 'channel': np.int8,
+                                   'condition': np.int8, 'value': np.float32})
+    n_seq  = df['condition'].nunique()
+    n_ch   = df['channel'].nunique()
+    n_time = df['time'].nunique()
+    if n_seq * n_ch * n_time != len(df):
+        raise ValueError(
+            f'{os.path.basename(fpath)}: {len(df)} rows is not '
+            f'{n_seq} seq x {n_ch} ch x {n_time} time -- layout unknown')
+
+    arr = df['value'].values.reshape(n_seq, n_ch, n_time)
+    del df; gc.collect()
+    return {s: np.ascontiguousarray(arr[s].T)[:, :n_elec].astype(np.float32)
+            for s in range(n_seq)}
+
+
+def _check_temporal_order(fpath, seq_data, min_ac=0.8):
+    """EEG at 512 Hz has lag-1 autocorrelation ~0.99. Anything near zero means
+    the samples are not in temporal order, which silently destroys every
+    frequency-domain and epoch-based measure downstream."""
+    for s, eeg in seq_data.items():
+        if eeg.shape[0] < 3:
+            continue
+        x = eeg[:, 0].astype(np.float64)
+        ac = float(np.corrcoef(x[:-1], x[1:])[0, 1])
+        if not np.isfinite(ac) or ac < min_ac:
+            raise ValueError(
+                f'{os.path.basename(fpath)} seq {s}: lag-1 autocorrelation '
+                f'{ac:.3f} < {min_ac} -- samples are not in temporal order')
+
+
+def load_sequences(fpath, dataset_name, n_elec=N_ELEC):
+    """Load one epbin CSV into {sequence_index: (n_time, n_elec)}.
+
+    Dispatches on dataset because the two exports use different value
+    layouts (see _load_talia_csv), then verifies temporal ordering.
+    """
+    if dataset_name == 'Talia':
+        seq_data = _load_talia_csv(fpath, n_elec=n_elec)
+    else:
+        seq_data = _pivot_csv(fpath, n_elec=n_elec)
+    _check_temporal_order(fpath, seq_data)
+    return seq_data
+
+
 def parse_angelique_fname(fname):
     """
     Returns (subject, modality, font_type, specific_font, condition)
@@ -206,7 +261,7 @@ def build_h5(csv_dir, h5_out, parse_fn, get_files_fn=None, dataset_name='?',
                 continue
 
             try:
-                seq_data = _pivot_csv(fpath, n_elec=n_elec)
+                seq_data = load_sequences(fpath, dataset_name, n_elec=n_elec)
             except Exception as e:
                 print(f'  SKIP {fname}: load error {e}')
                 continue
@@ -291,6 +346,7 @@ def build_df(records):
             'font_label': font_label,
             'condition':  r['condition'],
             'seq_name':   r['seq_name'],
+            'block_id':   f"{r['subject']}|{r['modality']}|{font_label}|{r['condition']}",
             'snr_disc_all':  float(f[:, 0].mean()),
             # global means per feature
             **{f'global_{FEAT_NAMES[fi]}': float(f[:, fi].mean())
@@ -516,7 +572,8 @@ def plot_umap_grid(df, out_dir):
             if cmap_dict:
                 cat_colors = cmap_dict
             else:
-                pal = plt.cm.get_cmap('tab20', len(cats))
+                # matplotlib >= 3.9 removed cm.get_cmap
+                pal = matplotlib.colormaps['tab20'].resampled(max(len(cats), 1))
                 cat_colors = {c: pal(i) for i, c in enumerate(cats)}
 
             for cat in cats:

@@ -57,7 +57,28 @@ def empirical_chance_purity(n, n_A=None, n_repeats=2000, seed=RANDOM):
         total += _purity(shuf, clusters)
     return total / n_repeats
 
-def _cluster_and_score(X, y_true, n_components_pca=None):
+def block_perm_purity(y_true, lbls, blocks, n_perm=10000, seed=RANDOM):
+    """Permutation null for purity with the BLOCK as the exchangeable unit."""
+    y_true = np.asarray(y_true)
+    blocks = np.asarray(blocks)
+    obs = _purity(y_true, lbls)
+    ub = np.unique(blocks)
+    if len(ub) < 2:
+        return float('nan'), float('nan')
+    blab = np.empty(len(ub), dtype=int)
+    for i, b in enumerate(ub):
+        v = y_true[blocks == b]
+        assert (v == v[0]).all(), f'block {b} spans both conditions'
+        blab[i] = v[0]
+    idx = np.searchsorted(ub, blocks)
+    rng  = np.random.default_rng(seed)
+    null = np.empty(n_perm)
+    for i in range(n_perm):
+        null[i] = _purity(rng.permutation(blab)[idx], lbls)
+    p = (np.sum(null >= obs) + 1) / (n_perm + 1)
+    return float(null.mean()), float(p)
+
+def _cluster_and_score(X, y_true, n_components_pca=None, blocks=None):
     """
     Standardise -> optional PCA -> UMAP(2D) -> GMM/KMeans.
     Returns dict of scores and the 2D embedding.
@@ -86,10 +107,26 @@ def _cluster_and_score(X, y_true, n_components_pca=None):
         scores[f'purity_{name}']  = round(_purity(y_true, lbls), 4)
         scores[f'ari_{name}']     = round(adjusted_rand_score(y_true, lbls), 4)
 
+        if blocks is not None:
+            nm, p = block_perm_purity(y_true, lbls, blocks)
+            scores[f'blocknull_{name}'] = round(nm, 4)
+            scores[f'blockp_{name}']    = round(p, 4)
+            # how much of the clustering is just block identity?
+            bl    = np.asarray(blocks)
+            ub    = np.unique(bl)
+            coh   = np.mean([len(set(lbls[bl == b])) == 1 for b in ub])
+            # baseline if cluster membership were independent of block, given the observed cluster sizes
+            pc    = np.bincount(lbls, minlength=2) / len(lbls)
+            coh0  = np.mean([(pc ** np.sum(bl == b)).sum() for b in ub])
+            scores[f'cohesion_{name}']  = round(float(coh), 4)
+            scores[f'cohesion0_{name}'] = round(float(coh0), 4)
+
+    # silhouette by CLUSTER (label-free)
     if len(np.unique(emb[:, 0])) > 1:
-        scores['silhouette'] = round(silhouette_score(emb, y_true), 4)
+        scores['silhouette']       = round(silhouette_score(emb, lbls), 4)
+        scores['silhouette_label'] = round(silhouette_score(emb, y_true), 4)
     else:
-        scores['silhouette'] = 0.0
+        scores['silhouette'] = scores['silhouette_label'] = 0.0
 
     return scores, emb
 
@@ -133,7 +170,7 @@ def analyse_snr_per_subject(df_snr):
         if y_true.sum() < 2 or (len(y_true) - y_true.sum()) < 2:
             continue
 
-        sc, emb = _cluster_and_score(flat, y_true, n_components_pca=15)
+        sc, emb = _cluster_and_score(flat, y_true, n_components_pca=15, blocks=sub['block_id'].values)
         if sc is None:
             continue
 
@@ -161,8 +198,8 @@ def analyse_erp_per_subject(records, df_meta):
 
         # full diff-ERP; labels never used here
         occ_ravel = np.stack([r['diff_erp'].ravel() for r in recs_s])
-
-        sc, emb = _cluster_and_score(occ_ravel, y_true, n_components_pca=10)
+        blocks  = np.array([r['block_id'] for r in recs_s])
+        sc, emb = _cluster_and_score(occ_ravel, y_true, n_components_pca=10, blocks=blocks)
         if sc is None:
             continue
 
@@ -415,7 +452,7 @@ def breakdown_by_modality(df_snr, records_erp, df_erp_meta):
         y_true = (sub['condition'] == 'Par').astype(int).values
         if y_true.sum() < 2 or (len(y_true) - y_true.sum()) < 2:
             continue
-        sc, _ = _cluster_and_score(flat, y_true, n_components_pca=10)
+        sc, _ = _cluster_and_score(flat, y_true, n_components_pca=10, blocks=sub['block_id'].values)
         if sc:
             rows_snr.append(dict(subject=subj, dataset=ds, modality=mod,
                                  n_seq=len(sub), **sc))
@@ -428,7 +465,7 @@ def breakdown_by_modality(df_snr, records_erp, df_erp_meta):
         if y_true.sum() < 2 or (len(y_true) - y_true.sum()) < 2:
             continue
         occ_ravel = np.stack([r['diff_erp'].ravel() for r in recs_s])
-        sc, _ = _cluster_and_score(occ_ravel, y_true, n_components_pca=8)
+        sc, _ = _cluster_and_score(occ_ravel, y_true, n_components_pca=8, blocks=np.array([r['block_id'] for r in recs_s]))
         if sc:
             rows_erp.append(dict(subject=subj, dataset=ds, modality=mod,
                                  n_seq=len(recs_s), **sc))
@@ -689,6 +726,27 @@ def print_summary(scores_snr, scores_erp):
                   f'mean={g["purity_gmm"].mean():.3f}  chance≈{row_ch.mean():.3f}  '
                   f't={t2:+.2f}  p={p2:.4f}')
 
+def print_block_summary(scores_snr, scores_erp):
+    print('\n' + '=' * 70)
+    print('BLOCK-LEVEL PERMUTATION (labels shuffled across source files)')
+    print('=' * 70)
+    for label, df in [('SNR', scores_snr), ('diff-ERP', scores_erp)]:
+        for ds, g in df.groupby('dataset'):
+            print(f'\n  {label:9} {DS_LABEL.get(ds, ds)}  n={len(g)}')
+            print(f'    purity_gmm      mean = {g.purity_gmm.mean():.3f}')
+            print(f'    seq-level chance     = '
+                  f'{g.n_seq.apply(empirical_chance_purity).mean():.3f}')
+            print(f'    BLOCK-level null     = {g.blocknull_gmm.mean():.3f}')
+            print(f'    block cohesion      = {g.cohesion_gmm.mean():.3f} '
+                  f'(independence baseline {g.cohesion0_gmm.mean():.3f})')
+            print(f'    ARI(clusters, condition) = {g.ari_gmm.mean():+.3f}')
+            p = g.blockp_gmm.values
+            # Benjamini-Hochberg, no extra dependency
+            o = np.argsort(p); q = np.empty_like(p)
+            q[o] = np.minimum.accumulate(
+                (p[o] * len(p) / np.arange(1, len(p) + 1))[::-1])[::-1]
+            print(f'    subjects p<.05 uncorrected: {(p < .05).sum()}/{len(p)}')
+            print(f'    subjects q<.05 (BH-FDR):    {(q < .05).sum()}/{len(p)}')
 
 def main():
     print('=' * 70)
@@ -708,7 +766,7 @@ def main():
     print('\nAnalysing per subject: diff-ERP (fully unsupervised)')
     scores_erp, embeds_erp = analyse_erp_per_subject(records_erp, df_erp_meta)
 
-    print_summary(scores_snr, scores_erp)
+    print_block_summary(scores_snr, scores_erp)
 
     # save raw scores
     all_scores = pd.concat([scores_snr, scores_erp], ignore_index=True)
