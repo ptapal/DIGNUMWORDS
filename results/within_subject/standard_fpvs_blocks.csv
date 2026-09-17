@@ -1,0 +1,480 @@
+dataset,subject,modality,font,condition,block_id,n_seq,n_samples,asym,sym
+Angelique,S25,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.15410446230736044,0.7701992800252304
+Angelique,S34,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.5097429038335879,2.1559410815437636
+Angelique,S15,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.3206654235513674,1.6336504037802417
+Angelique,S32,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.22213969783236584,1.95657488082846
+Angelique,S11,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.2872074775190817,2.576497476754917
+Angelique,S21,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.5702752345759008,1.712651495097412
+Angelique,S03,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.20144105738856727,0.5433647867499126
+Angelique,S28,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.18012057658698824,1.420052986074653
+Angelique,S22,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.04290031859030326,0.8868227949779895
+Angelique,S27,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.3076068303651279,0.9865668724394507
+Angelique,S13,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.5715151425037118,1.5703653167519305
+Angelique,S23,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.11270585842430593,1.0915099021254313
+Angelique,S08,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.04445429611951113,0.6803576163947582
+Angelique,S38,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,0.04768033801681466,1.6441871874655287
+Angelique,S35,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.11617235290921396,0.9100275261120664
+Angelique,S31,Dig,1F,Control,epbin_Dig_1F_C1 21 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.008062066199878842,0.5876250840309594
+Angelique,S04,Dig,1F,Control,epbin_Dig_1F_C1 21 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.10716356481942865,2.017687964770529
+Angelique,S10,Dig,1F,Control,epbin_Dig_1F_C1 21 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.19589040635360613,1.2387648133767977
+Angelique,S18,Dig,1F,Control,epbin_Dig_1F_C1 21 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.18812690902915266,0.8807443969158663
+Angelique,S26,Dig,1F,Control,epbin_Dig_1F_C1 21 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.2465759398829606,0.8256053585145209
+Angelique,S29,Dig,1F,Control,epbin_Dig_1F_C1 21 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.08974031317565179,3.5260585476126933
+Angelique,S33,Dig,1F,Control,epbin_Dig_1F_C1 21 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.20099922673155868,2.2486317029429808
+Angelique,S02,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.321615534213682,0.9346228417836957
+Angelique,S05,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.169275831638111,0.6344660653008356
+Angelique,S07,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.29776041623618865,2.330650780039529
+Angelique,S09,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.05224822947962416,0.7261327511320511
+Angelique,S16,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.2538240644046002,3.807783438410196
+Angelique,S19,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,-0.05900348795370923,2.080721815013223
+Angelique,S24,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.055237182312541544,1.2477263677865267
+Angelique,S37,Dig,1F,Control,epbin_Dig_1F_C1 21 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.11645350646641518,3.6125915611369743
+Angelique,S25,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,-0.010833031135714717,0.7462500619391601
+Angelique,S34,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.45901814682616127,2.108480616679622
+Angelique,S15,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.107349072324319,1.7418007116971745
+Angelique,S32,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.2745909875051843,1.9258901104331017
+Angelique,S11,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.2026014288680421,2.633465526004632
+Angelique,S21,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.12897027759916252,2.6336381048378015
+Angelique,S03,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.18154772567666239,0.6462219047049681
+Angelique,S28,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.27853806378940743,1.3693838925618265
+Angelique,S22,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.0008754561551743076,1.0697969018171232
+Angelique,S27,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.38738712585634655,1.233708913024101
+Angelique,S13,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.34548267908394337,1.8182074300323925
+Angelique,S23,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.2491247068780164,1.0530533931321568
+Angelique,S08,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.20153396690471304,1.4222209872677922
+Angelique,S38,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,0.49073600375817883,1.3033684274802604
+Angelique,S35,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.18345613881117767,0.9948032850192652
+Angelique,S31,Dig,1F,Par,epbin_Dig_1F_Par 11 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.26354862790968686,0.9347156088592279
+Angelique,S04,Dig,1F,Par,epbin_Dig_1F_Par 11 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.15449144028955036,2.1238932268073163
+Angelique,S10,Dig,1F,Par,epbin_Dig_1F_Par 11 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.4575012499052617,0.9094376352926096
+Angelique,S18,Dig,1F,Par,epbin_Dig_1F_Par 11 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,-0.0005288163406981378,1.0475946295385559
+Angelique,S26,Dig,1F,Par,epbin_Dig_1F_Par 11 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.3642733473744657,1.020277266494102
+Angelique,S29,Dig,1F,Par,epbin_Dig_1F_Par 11 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.34844745799071264,2.676181727606389
+Angelique,S33,Dig,1F,Par,epbin_Dig_1F_Par 11 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.11377988497002257,2.3110528705227704
+Angelique,S02,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.23242443882756764,0.9343849968993001
+Angelique,S05,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,-0.0406261734250519,0.5230584966225756
+Angelique,S07,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.16974230338301924,2.5766731374379663
+Angelique,S09,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.20815096950779358,0.905144706264966
+Angelique,S16,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.0030418450219763665,3.1749871021343603
+Angelique,S19,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.349101728035344,1.925139089425405
+Angelique,S24,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.216291805004908,1.4648386045462556
+Angelique,S37,Dig,1F,Par,epbin_Dig_1F_Par 11 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.26499175363116795,2.7434675455507307
+Angelique,S25,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.07708203989184564,0.5958867578042878
+Angelique,S34,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.18376545773612127,2.266923659791549
+Angelique,S15,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.06525069263039364,1.2136691415475473
+Angelique,S32,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,-0.04454494898931847,1.776372994813654
+Angelique,S11,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,-0.1661489247861836,3.2003356520500446
+Angelique,S21,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,-0.08464693257378209,1.950465684135755
+Angelique,S03,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,-0.010585990837878655,0.48385077000906074
+Angelique,S28,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,-0.003280238093187414,1.619200538016028
+Angelique,S22,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.05658561270684004,0.9735088524305159
+Angelique,S27,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,-0.09068550417820612,1.0012088110670447
+Angelique,S13,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.123891807678673,1.3580587070642247
+Angelique,S23,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,-0.018815467548039227,1.2509261748443046
+Angelique,S08,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.1104284127553304,0.68275245020373
+Angelique,S38,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,-0.030225517642166876,1.6677983196245298
+Angelique,S35,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.17221574381821686,1.4708061153069139
+Angelique,S31,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,-0.04998521413654088,1.031359349584414
+Angelique,S04,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.14497924057973754,2.4768946921038957
+Angelique,S10,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.0749546093866229,1.6936381014270916
+Angelique,S18,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.11824713906066286,1.0799278120199838
+Angelique,S26,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,-0.009929239439467594,1.9536272614366479
+Angelique,S29,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,-0.005613601766526699,3.0758267723851733
+Angelique,S33,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.017815151458813093,2.1202748716912336
+Angelique,S02,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.21697861390809217,1.0716063136027918
+Angelique,S05,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.16875932469136184,0.7091852463781834
+Angelique,S07,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.0821476685297158,2.1693088803440332
+Angelique,S09,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.0015462530621637924,0.7120715801914533
+Angelique,S16,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,-0.13501558804677594,2.2693033287715583
+Angelique,S19,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,-0.03393403068184854,1.0036888809667694
+Angelique,S24,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,-0.18807904318802887,1.5112114927421014
+Angelique,S37,Dig,20F/A,Control,epbin_Dig_20F_Atp_C1 23 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.22357482380337185,3.19965089029736
+Angelique,S25,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.06653077289876011,0.6926503328399526
+Angelique,S34,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.39156465190980166,2.040896767439942
+Angelique,S15,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.05847250152793195,1.076133493644496
+Angelique,S32,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.24067442605478895,2.1004845233013234
+Angelique,S11,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,-0.0033220694296889897,3.366112788104349
+Angelique,S21,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,-0.08113903283245036,2.387686666308178
+Angelique,S03,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.13399139139801264,0.563024385418329
+Angelique,S28,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.21754084351576036,1.4959095704058807
+Angelique,S22,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.0705433925613761,1.0272757959448628
+Angelique,S27,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.0687414739901821,1.0594081931437056
+Angelique,S13,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.1932525086320109,1.4487376774971685
+Angelique,S23,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.028498937686284382,1.0527356639504433
+Angelique,S08,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.060193183210988835,0.8762875644283161
+Angelique,S38,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,-0.1164963606538044,1.5028617572453287
+Angelique,S35,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.19738356230987442,1.4561653358654845
+Angelique,S31,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.033177038913385734,1.0639039058652189
+Angelique,S04,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.00779947628163629,2.468296655557222
+Angelique,S10,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.13133117504831815,1.5152770783752203
+Angelique,S18,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.06900548355446921,1.2201579743996263
+Angelique,S26,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,-0.008297723511026964,1.9554363414645195
+Angelique,S29,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.183047984002365,3.146261736129721
+Angelique,S33,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,-0.019040290887157127,2.2374714216631317
+Angelique,S02,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.4623134016162819,1.2520289534909856
+Angelique,S05,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.15579802160047823,0.9566653143200609
+Angelique,S07,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,-0.0203548279694385,2.3461855200843678
+Angelique,S09,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.15547326445165607,0.5172556441070305
+Angelique,S16,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.18774634009848037,2.841126957183911
+Angelique,S19,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,-0.035401355475187295,1.1863014687680535
+Angelique,S24,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,-0.20518600402606857,1.997226469218731
+Angelique,S37,Dig,20F/A,Par,epbin_Dig_20F_Atp_Par 13 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,-0.06736742415361935,3.3368721569163933
+Angelique,S25,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.24573619415362674,0.6138449704481497
+Angelique,S34,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.44554526131186223,2.4534458175508513
+Angelique,S15,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.16169419512152672,1.4932624756669004
+Angelique,S32,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,-0.006593873310420252,1.5136120613250466
+Angelique,S11,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,-0.08610219767110214,3.454964498885804
+Angelique,S21,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.026043683600922428,2.759884394498335
+Angelique,S03,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.022904700961791803,0.8208260330268078
+Angelique,S28,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.005434063625418477,0.42007079285879934
+Angelique,S22,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.011896585838662252,1.4019754574530654
+Angelique,S27,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.09571131732728748,1.1507424499011703
+Angelique,S13,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.18473224538481897,1.7885218847336042
+Angelique,S23,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.07400896674436,1.3205713709402416
+Angelique,S08,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.0008271463836232798,1.4164584721955988
+Angelique,S38,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,0.17231178739004666,1.7886420852608151
+Angelique,S35,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.04064160399138927,1.2874356905619304
+Angelique,S31,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,-0.010245212043325111,0.9330609872316322
+Angelique,S04,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,-0.06033224695258668,2.8102447893470526
+Angelique,S10,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.10427514360182813,1.7961512983052268
+Angelique,S18,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,-0.01745577632553049,1.084593036522468
+Angelique,S26,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.18338432990842396,1.6599481863280137
+Angelique,S29,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.2749432008713484,3.7869200478825302
+Angelique,S33,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.14031124922136465,2.235673781173925
+Angelique,S02,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,-0.07227427771108016,1.658403826567034
+Angelique,S05,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.0860784509115749,0.7672536360720793
+Angelique,S07,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.21914772027068669,3.1770857289019556
+Angelique,S09,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.10461355461221604,1.2593553611594768
+Angelique,S19,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.20897825124363106,1.4196578415317669
+Angelique,S24,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.032554487283858985,2.219940092000696
+Angelique,S37,Dig,20F/S,Control,epbin_Dig_20F_Std_C1 22 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,-0.04686085341705215,3.4907081706656347
+Angelique,S25,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.30101667696403134,0.8218254862974088
+Angelique,S34,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.4840707356731097,2.5401195571240454
+Angelique,S15,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.1077388085735341,1.3998720910814073
+Angelique,S32,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.3256189301609993,1.5744563945465617
+Angelique,S11,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.32093019535144174,3.831159132015374
+Angelique,S21,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.10192704180048573,2.8363563000328007
+Angelique,S03,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.12912564186586276,0.7163487948063347
+Angelique,S28,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.26472082775500083,1.6388405361730192
+Angelique,S22,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.04780135831485192,1.6275534160021277
+Angelique,S27,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,-0.057650970812473036,1.1522466695557039
+Angelique,S13,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.24928701472365195,1.6173989282300074
+Angelique,S23,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.1724765696045425,1.37633401590089
+Angelique,S08,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,-0.08391419146209955,1.5323627784641252
+Angelique,S38,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,-0.07699229454414712,1.8328082176546256
+Angelique,S35,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.19975894275638795,1.2451300683120885
+Angelique,S31,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,-0.03933325709982051,0.9342545946646067
+Angelique,S04,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.001849608185390622,2.8042496889829636
+Angelique,S10,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.09024111440198289,1.9775035685549178
+Angelique,S18,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.12653650974647868,0.9005898828100827
+Angelique,S26,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.1757876638116108,1.8528818986896012
+Angelique,S29,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.11181960896485384,3.639637614910801
+Angelique,S33,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.017162812770240836,2.1864032979226775
+Angelique,S02,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.30974089437060887,1.7074363336174025
+Angelique,S05,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.3333827378228307,1.1810272170437708
+Angelique,S07,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.11956059829228455,3.227305791237288
+Angelique,S09,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.044804214499890804,1.2577518259899483
+Angelique,S16,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.033841392956674064,3.774046329677933
+Angelique,S19,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.12653981149196625,1.360869855619967
+Angelique,S24,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.15109759486383864,2.1769847952657275
+Angelique,S37,Dig,20F/S,Par,epbin_Dig_20F_Std_Par 12 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.10524133986069098,4.27105978379647
+Angelique,S25,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.08615627367463377,0.3538578431018525
+Angelique,S34,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.439690012174348,2.9133662968460055
+Angelique,S15,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.22722113598138094,2.472471169920431
+Angelique,S32,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.6647850815206766,3.188914390901724
+Angelique,S11,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.6805128269932337,2.0758077276663647
+Angelique,S21,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.5529169664821691,1.6331115901056266
+Angelique,S03,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.06345097084219257,0.7276097903442051
+Angelique,S28,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.5247480560404559,1.62015929673281
+Angelique,S22,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.011637674541109144,0.7665516239487462
+Angelique,S27,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.3159462611915337,1.9765526774442856
+Angelique,S13,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.15679081632859176,1.7916262514061398
+Angelique,S23,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.09916205300639074,1.221316481836968
+Angelique,S08,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.09085953152841993,1.5498465422747862
+Angelique,S38,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,0.23559328872296548,1.6561015641523733
+Angelique,S35,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.3144402195596032,0.8811382959700294
+Angelique,S31,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.2630537603464391,1.0059611682469645
+Angelique,S04,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.7127100324465169,2.2260161764505835
+Angelique,S10,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.4478409482787053,1.361079731128282
+Angelique,S18,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,-0.028590626704196133,0.4257407383993268
+Angelique,S26,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.2581931280179156,0.7848413871187303
+Angelique,S29,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.49791994380454224,2.254105687348379
+Angelique,S33,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.11896569468080997,1.66435356096675
+Angelique,S02,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.5434616014568343,1.720624904355241
+Angelique,S05,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.4172268139405383,0.7821570448577404
+Angelique,S07,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.09671470264179838,2.5400601462978454
+Angelique,S09,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.24618032797136238,0.9781792311825686
+Angelique,S16,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.4955267190105386,3.083855330737101
+Angelique,S19,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.41446617535418934,1.3571917321532965
+Angelique,S24,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.2808501987407605,1.8244728342526488
+Angelique,S37,NumWoGE,1F,Control,epbin_NumWoGE_1F_C1 24 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.4478356732676427,4.3851858226375455
+Angelique,S25,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,-0.002609049073523946,0.492500901222229
+Angelique,S34,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.3623832198273804,2.809403753322032
+Angelique,S15,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.372063069500857,2.4978832150292067
+Angelique,S32,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.3970606537121866,2.546317452150914
+Angelique,S11,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.2786535827649964,2.156499193256928
+Angelique,S21,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.583265775297251,1.7364142067316506
+Angelique,S03,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.05518252914771438,0.6391007911620868
+Angelique,S28,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.24064989796736172,1.2855957217721476
+Angelique,S22,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.011320742261078626,0.8383244164288044
+Angelique,S27,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.40475437603890896,1.7488924351831279
+Angelique,S13,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.30567150604393745,1.4733774045275316
+Angelique,S23,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.19129891005448169,1.2676970964918532
+Angelique,S08,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.09227821013579765,0.7755172963564594
+Angelique,S38,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,0.2833217966059844,1.8986508616556723
+Angelique,S35,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,-0.13121981028881338,0.8363743300239245
+Angelique,S31,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.09894710220396519,0.9225946337812476
+Angelique,S04,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.18840426796426374,2.2670674429585533
+Angelique,S10,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.35428164299163556,1.7017314591341548
+Angelique,S18,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.04734915360394452,0.458028568368819
+Angelique,S26,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.3271426735445857,0.939852084654073
+Angelique,S29,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.4785410823921363,3.338944545429614
+Angelique,S33,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.2962419794251521,1.6009497505923114
+Angelique,S02,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.6318340624372165,1.335752941047152
+Angelique,S05,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.046084434000982166,0.21860265400674608
+Angelique,S07,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.7663254735784398,2.8959909161138864
+Angelique,S09,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.3616719981138077,1.1156426027624144
+Angelique,S16,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.3460091871933805,2.395605761971739
+Angelique,S19,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.5795179827966624,1.372619389452868
+Angelique,S24,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.3953574907241596,1.968326715959443
+Angelique,S37,NumWoGE,1F,Par,epbin_NumWoGE_1F_Par 14 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.406308454564876,3.6115575873603425
+Angelique,S25,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,-0.003068639896810048,0.6105164831711186
+Angelique,S34,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.05676779461403687,2.263169322576788
+Angelique,S15,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.18671773756957716,2.064986440249615
+Angelique,S32,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.20171837343109977,1.8389120935979815
+Angelique,S11,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.04259396199550893,2.1574846716183753
+Angelique,S21,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.058176893740892424,1.3121449990818896
+Angelique,S03,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.12911486925764215,0.4714745777762599
+Angelique,S28,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.23801818024367094,1.4279485642910004
+Angelique,S22,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.10274412244972256,0.4729254463066657
+Angelique,S27,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,-0.05219402102132639,1.9665573364537623
+Angelique,S13,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.1648376623375548,0.982810591864917
+Angelique,S23,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.05000903685059812,1.194722629359199
+Angelique,S08,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,-0.04114694096561935,0.4670792177526487
+Angelique,S38,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,-0.010968976964553193,1.2761405447704925
+Angelique,S35,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.04874849402242237,1.3724880870431662
+Angelique,S31,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.07996770527420774,1.0329490982823901
+Angelique,S04,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,-0.06051733179224862,3.8142137492282524
+Angelique,S10,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.20134978565490907,1.0985481712139316
+Angelique,S18,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.0413516348020898,0.8044635521041023
+Angelique,S26,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.026851207949221127,1.0935123807026281
+Angelique,S29,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.2537446767091751,1.6799132585939434
+Angelique,S33,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.01111426452795665,0.7047008372222384
+Angelique,S02,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.10062024100787109,1.3462959069551692
+Angelique,S05,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.26383321949591243,1.21124917972419
+Angelique,S07,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.12068148950735727,2.142624444224768
+Angelique,S09,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.0795300758133332,0.6073569632652733
+Angelique,S16,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.01950118876993656,2.3958899550553827
+Angelique,S19,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.173030211072829,0.6774124372750521
+Angelique,S24,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.07113894364900059,1.8687001532978482
+Angelique,S37,NumWoGE,20F/A,Control,epbin_NumWoGE_20F_Atp_C1 26 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.2931366362091568,2.4702148261583514
+Angelique,S25,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.14454152714461088,0.7754942066967487
+Angelique,S34,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.05758264340046379,2.199496039292878
+Angelique,S15,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.43776772083300686,2.0228555592604804
+Angelique,S32,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.1273474893015292,1.8391139985372622
+Angelique,S11,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.23042852203879094,2.242496383169459
+Angelique,S21,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.34180057918032014,1.5081809980587828
+Angelique,S03,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,-0.007346547829608124,0.5133059120012654
+Angelique,S28,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.21781693036771482,1.3703241462094917
+Angelique,S22,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,-0.05578356298307578,0.5040719825774431
+Angelique,S27,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.06979619473632837,1.6169358380138874
+Angelique,S13,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.21593876348601446,1.1187618455539148
+Angelique,S23,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.21849116124212742,1.2060332740139632
+Angelique,S08,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.17059988869975012,0.6024103759684496
+Angelique,S38,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,-0.022295349587996803,1.1077739745378494
+Angelique,S35,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.1661117553917898,0.9378420787139071
+Angelique,S31,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.006431527125338704,1.1484474744647741
+Angelique,S04,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,-0.12108457968052891,3.8381276828133397
+Angelique,S10,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.18470059894025326,1.041068647056818
+Angelique,S18,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.08679421111527416,0.6871964931488037
+Angelique,S26,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.13245686650690106,1.0515527422022488
+Angelique,S29,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,-0.09407230652868748,2.235661370886697
+Angelique,S33,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.03820978032632005,0.9626555980907546
+Angelique,S02,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.24143762741651797,1.9187747965463333
+Angelique,S05,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.0689311691870292,1.164523812631766
+Angelique,S07,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.5204718634486198,2.1578327916148634
+Angelique,S09,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.1250040598420633,0.3294437446941932
+Angelique,S16,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.5339069553754396,2.4386694087750382
+Angelique,S19,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.06057566342254479,0.712971289538675
+Angelique,S24,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,-0.013054693117737777,1.527855695121818
+Angelique,S37,NumWoGE,20F/A,Par,epbin_NumWoGE_20F_Atp_Par 16 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.07239579719801742,2.7534082233905792
+Angelique,S25,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.1982323567693432,0.6396872927952144
+Angelique,S34,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,-0.019395108955601842,2.489483899747332
+Angelique,S15,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.09017981299095684,1.8889353113869827
+Angelique,S32,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.01914138698743449,2.190124024533563
+Angelique,S11,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.16864015803568894,2.4269291588829622
+Angelique,S21,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.14233867989646062,1.122646676376462
+Angelique,S03,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,-0.013410940973295107,0.3923044041213062
+Angelique,S28,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.30839890034662354,1.5928123593330383
+Angelique,S22,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,-0.04891766493933069,0.7482740328543716
+Angelique,S27,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,-0.01252728255672586,1.2035966070575848
+Angelique,S13,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.2051301569574409,1.3356745292743049
+Angelique,S23,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.06364374607801437,1.0193344831673636
+Angelique,S08,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.035961745099888906,0.9872932636903392
+Angelique,S38,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,0.040545733852518924,1.4793353960331943
+Angelique,S35,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.15946051923351157,1.474820228293538
+Angelique,S31,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.005901568465762667,1.2208308792776532
+Angelique,S04,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.12106380197736952,2.8285362877779536
+Angelique,S10,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.14077230418721834,1.1851758307052984
+Angelique,S18,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,0.11438784789707925,0.5308975189303359
+Angelique,S26,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.053703728028469615,0.8102004840556118
+Angelique,S29,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,0.0020362467815478735,3.0569426404933138
+Angelique,S33,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,0.08822500524628495,1.1323837809678583
+Angelique,S02,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.004816145739621566,1.3719667289406061
+Angelique,S05,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.26553311706003213,1.240485841408372
+Angelique,S07,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.03610237315297126,2.4048603061172695
+Angelique,S09,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.14713516298474538,0.46031401885880363
+Angelique,S16,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.19139905936188167,3.359731829725206
+Angelique,S19,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.029473420542975276,0.9149593690203296
+Angelique,S24,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.3314333189692762,1.9680889118462803
+Angelique,S37,NumWoGE,20F/S,Control,epbin_NumWoGE_20F_Std_C1 25 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.3315234033183919,3.801223266455862
+Angelique,S25,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixAF8 icfilt ica ep1 but chanlocs chansel chanlabels S25.csv,2,30720,0.05209235319246849,0.6492668031197455
+Angelique,S34,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixC4 ica ep1 but chanlocs chansel chanlabels S34.csv,2,30720,0.22773038999487957,2.48559009635614
+Angelique,S15,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixC5 ica ep1 but chanlocs chansel chanlabels S15.csv,2,30720,0.29739114300658304,2.143591874382562
+Angelique,S32,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixF6 fixP5 fixFC5 icfilt ica ep1 but chanlocs chansel chanlabels S32.csv,2,30720,0.22927875506381196,2.1886140203310385
+Angelique,S11,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S11.csv,2,30720,0.2119721028332909,2.69608876771397
+Angelique,S21,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixF7 icfilt ica ep1 but chanlocs chansel chanlabels S21.csv,2,30720,0.04973001736733649,1.4403130461772282
+Angelique,S03,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixF8 ica ep1 but chanlocs chansel chanlabels S03.csv,2,30720,0.07039156147382326,0.3348058043047786
+Angelique,S28,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixF8 icfilt ica ep1 but chanlocs chansel chanlabels S28.csv,2,30720,0.24133945008118948,1.0143729061302211
+Angelique,S22,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixFC4 icfilt ica ep1 but chanlocs chansel chanlabels S22.csv,2,30720,0.13625831715762615,0.6231518982806139
+Angelique,S27,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixFT8 icfilt ica ep1 but chanlocs chansel chanlabels S27.csv,2,30720,0.03143885928309626,1.5198934138235118
+Angelique,S13,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixO1 icfilt ica ep1 but chanlocs chansel chanlabels S13.csv,2,30720,0.09968540672626759,1.2364011006429791
+Angelique,S23,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixP2 fixP3 fixC3 icfilt ica ep1 but chanlocs chansel chanlabels S23.csv,2,30720,0.06468427026023467,0.9439820678283771
+Angelique,S08,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixPO8 icfilt ica ep1 but chanlocs chansel chanlabels S08.csv,2,30720,0.09976628981530666,1.2326089239989717
+Angelique,S38,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixT8 fixF8 fixFT7 icfilt ica ep1 but chanlocs chansel chanlabels S38.csv,2,30720,-0.02661014255136252,1.718716831981308
+Angelique,S35,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixT8 ica ep1 but chanlocs chansel chanlabels S35.csv,2,30720,0.11735570141010815,1.3488094985692038
+Angelique,S31,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr fixTP8 fixC6 ica ep1 but chanlocs chansel chanlabels S31.csv,2,30720,0.044867973671191275,1.2440637898527913
+Angelique,S04,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr ica ep1 but chanlocs chansel chanlabels S04.csv,2,30720,0.3397502857777807,3.023512615511815
+Angelique,S10,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr ica ep1 but chanlocs chansel chanlabels S10.csv,2,30720,0.276864614441163,1.019788140638007
+Angelique,S18,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr ica ep1 but chanlocs chansel chanlabels S18.csv,2,30720,-0.023004005042215177,0.7964038148315417
+Angelique,S26,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr ica ep1 but chanlocs chansel chanlabels S26.csv,2,30720,0.1297464364518722,1.058508183600174
+Angelique,S29,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr ica ep1 but chanlocs chansel chanlabels S29.csv,2,30720,-0.04226017474300331,3.2198227387335567
+Angelique,S33,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr ica ep1 but chanlocs chansel chanlabels S33.csv,2,30720,-0.038745480279127754,0.9940351059453356
+Angelique,S02,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S02.csv,2,30720,0.4812198612425062,1.6689712341046996
+Angelique,S05,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S05.csv,2,30720,0.1373851054037611,1.1465825289487839
+Angelique,S07,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S07.csv,2,30720,0.4776787942068444,2.4687397120934396
+Angelique,S09,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S09.csv,2,30720,0.05866357518566979,0.646373803416888
+Angelique,S16,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S16.csv,2,30720,0.4800952825074395,2.725932518951595
+Angelique,S19,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S19.csv,2,30720,0.08398316303888957,0.8912055351667934
+Angelique,S24,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S24.csv,2,30720,0.35012038538439405,2.1621442433032723
+Angelique,S37,NumWoGE,20F/S,Par,epbin_NumWoGE_20F_Std_Par 15 rr icfilt ica ep1 but chanlocs chansel chanlabels S37.csv,2,30720,0.42978586008151365,4.1734876792050075
+Talia,S01,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,0.37215295020076966,1.4206981084619958
+Talia,S02,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.2401768429101341,1.8165648295026686
+Talia,S03,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.26962373447087074,1.8362768673234515
+Talia,S04,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.22799021285027268,0.8596402106599675
+Talia,S05,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.2864647584760355,2.0812511758671866
+Talia,S06,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.2412861529737711,2.788068705548843
+Talia,S07,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.49422633544438416,1.001593422041171
+Talia,S08,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,0.13478925969037747,0.8317850166931748
+Talia,S09,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.6262414406778084,1.0853217639442947
+Talia,S10,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.5457167627496852,1.9939878400829105
+Talia,S11,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.24076515762135386,1.4247852756331365
+Talia,S12,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.31832112340877455,1.738188737175531
+Talia,S13,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,0.6225321571239167,1.6798104275431898
+Talia,S14,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,0.09462452959269285,0.639435728184051
+Talia,S15,Dig,1F,Par,epb_11_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.1994457743648026,1.9156546270888715
+Talia,S01,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,0.12950071268197563,1.6954549284030995
+Talia,S02,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.3461793609894812,2.229235250295864
+Talia,S03,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.1795265874825418,2.1266618366870613
+Talia,S04,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.24200430450340113,0.7369529772549868
+Talia,S05,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.17412324467053014,1.8768111325593457
+Talia,S06,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.11333749991738135,2.6503370224187774
+Talia,S07,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.28714292693055343,1.4743297576076455
+Talia,S08,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,0.26297488612019354,0.9327654778543446
+Talia,S09,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.3751810047154625,1.0479647889733315
+Talia,S10,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.2612300128675997,2.5202833611725106
+Talia,S11,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.1869097033308612,1.1731751271420054
+Talia,S12,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.5739406733256247,1.6653114577962294
+Talia,S13,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,-0.029627139473127007,2.091464111374484
+Talia,S14,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,0.0007752714575164979,1.085072394149999
+Talia,S15,Dig,10F/S,Par,epb_12_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.28849796640376246,1.7793133320907752
+Talia,S01,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,0.08248451217595074,1.4666365590981312
+Talia,S02,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.047768308625866965,1.6827151820891433
+Talia,S03,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.2515832791104913,2.2991859998243553
+Talia,S04,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.039153938854320176,0.6244183225143287
+Talia,S05,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.09934618727614483,1.5594957999678123
+Talia,S06,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.07483617257740763,2.3345691591708198
+Talia,S07,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.24814584975441295,1.2675807105584278
+Talia,S08,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,-0.05535777958316936,0.8169754242731466
+Talia,S09,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.5279025182955794,0.8196727447211742
+Talia,S10,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.16747418920406038,1.3723968244675133
+Talia,S11,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.44539414894663626,1.0337747637596395
+Talia,S12,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.3157374756410718,1.3071247033981814
+Talia,S13,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,0.04317271988838911,1.011442175031536
+Talia,S14,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,-0.019466599656475916,1.1633059753932886
+Talia,S15,Dig,10F/M,Par,epb_13_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,-0.010440749737123653,1.6269598716042108
+Talia,S01,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,0.1383751214792331,1.29642160071267
+Talia,S02,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.23003401565882892,1.2695199708557792
+Talia,S03,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.20294319910721645,1.8972695519526799
+Talia,S04,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.23741008843191794,0.8405599259874887
+Talia,S05,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.4981348796023263,2.363073563720617
+Talia,S06,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.409306411165744,2.107494151633647
+Talia,S07,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.475870144346522,1.2958051694764032
+Talia,S08,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,0.15263891820278433,1.2313954530076847
+Talia,S09,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.8961278294316597,1.1725503460297153
+Talia,S10,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.39449257227695644,1.7145704531835184
+Talia,S11,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.6475355569273233,1.267897156481114
+Talia,S12,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.1582682402804494,1.402146374496321
+Talia,S13,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,0.20238865684303975,1.31084339093003
+Talia,S14,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,0.4611717251957291,1.200304405970706
+Talia,S15,Dig,20F/HD,Par,epb_14_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.31809468277626574,1.5684892412068114
+Talia,S01,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,0.07884367865820725,1.2956383575995765
+Talia,S02,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.33728547197663117,1.9934474690299895
+Talia,S03,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.26062967638588613,1.8041650767231154
+Talia,S04,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.3399916619269384,1.0330324064319332
+Talia,S05,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.3334922505956557,1.9740332897959483
+Talia,S06,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.21318226747421753,2.8636629620773926
+Talia,S07,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.14560574375920823,1.1247812185643449
+Talia,S08,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,0.059289851329392865,0.7767482270590134
+Talia,S09,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.45729454182502294,0.9978281232631868
+Talia,S10,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,2,25532,0.386440083798435,1.9616696979436612
+Talia,S11,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.6779182091769245,1.3733402991460428
+Talia,S12,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.4045178863323397,1.777968782517645
+Talia,S13,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,-0.05753891480465728,1.543257394184669
+Talia,S14,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,0.24301050329166982,0.6376635981723666
+Talia,S15,Dig,1F,Control,epb_21_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.38755835085693335,2.079392642196682
+Talia,S01,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,0.3039289702557855,1.3504615461246834
+Talia,S02,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.07657207233003446,2.244275362851719
+Talia,S03,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.07535055714348951,1.8664193050935864
+Talia,S04,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.45361905700216687,0.7215032664438089
+Talia,S05,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.1066037363683184,1.8151178290653562
+Talia,S06,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.31047871926178533,3.0636462587863207
+Talia,S07,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.08342236497749884,1.4858832829114463
+Talia,S08,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,-0.037815016280445785,1.0614207559782598
+Talia,S09,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.08915039741744599,0.9599567330959771
+Talia,S10,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.24892147371752393,2.3899962293605013
+Talia,S11,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.04742368031293153,1.120528648296992
+Talia,S12,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.20909253176715636,1.6570034672816594
+Talia,S13,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,0.037713239279886096,2.666833421629336
+Talia,S14,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,-0.05599550613098676,1.008064805633492
+Talia,S15,Dig,10F/S,Control,epb_22_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.09047981299873856,1.9937821375206115
+Talia,S01,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,-0.13078010910087162,1.6640133046441608
+Talia,S02,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,-0.01036958417130842,1.686598791844315
+Talia,S03,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.08927939118196565,2.1159160780823894
+Talia,S04,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.0868153973068628,0.6379227046337392
+Talia,S05,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.20829651960068277,1.792217817881869
+Talia,S06,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.12790665682405233,2.189684432620804
+Talia,S07,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,-0.004425565401713058,1.3875008310294814
+Talia,S08,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,-0.027815377857122153,0.8014765889901254
+Talia,S09,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,-0.03451682213279936,0.823902657876412
+Talia,S10,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.10567899731298289,1.5867808835787904
+Talia,S11,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.05148616826368702,0.9512468679911561
+Talia,S12,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.18285465871708262,1.0373023549715676
+Talia,S13,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,0.07728576008230448,1.1971794860437512
+Talia,S14,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,0.22172894054609868,1.180113652928008
+Talia,S15,Dig,10F/M,Control,epb_23_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.15228472898403805,1.6333627559037671
+Talia,S01,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S01.csv,3,25532,-0.11167395715084341,1.6900147175830271
+Talia,S02,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S02.csv,3,25532,0.2789808824761874,1.4636548413998551
+Talia,S03,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S03.csv,3,25532,0.07963599575062592,2.0207120797907314
+Talia,S04,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S04.csv,3,25532,0.25084100425657296,0.8616822183960013
+Talia,S05,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S05_icf.csv,3,25532,0.18050475004646516,2.3274683934739895
+Talia,S06,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S06_icf.csv,3,25532,0.3644164140439696,2.1779905589711337
+Talia,S07,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S07_icf.csv,3,25532,0.2615753432942761,1.177191635593772
+Talia,S08,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S08.csv,3,25532,-0.029382347594946616,1.266174908210006
+Talia,S09,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S09.csv,3,25532,0.19257531449612644,1.3781676206530795
+Talia,S10,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S10.csv,3,25532,0.15991069842129946,1.077063154739638
+Talia,S11,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S11.csv,3,25532,0.37760262098163366,1.0685460716485977
+Talia,S12,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S12.csv,3,25532,0.15407480527129438,1.5658677466627622
+Talia,S13,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S13.csv,3,25532,0.13791763513452476,1.6325131164242825
+Talia,S14,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S14.csv,3,25532,0.3201161369474398,1.0787597165132563
+Talia,S15,Dig,20F/HD,Control,epb_24_rr_ich_ch68_epm_bbpf_bc_NumberShape_S15.csv,3,25532,0.1178605801736315,1.4599133277725842

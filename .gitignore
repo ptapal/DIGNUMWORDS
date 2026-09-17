@@ -3,3 +3,5 @@ h5_new/
 __pycache__/
 .vscode/
 make_figures.py 
+poster_figures.py
+results/figures/poster/

@@ -1,9 +1,3 @@
-"""
-USAGE:
-python block_level_test.py erp
-python block_level_test.py erp --all             # keep S20/S30
-python block_level_test.py erp --drop=S02,S03    # sensitivity analysis
-"""
 import sys
 import numpy as np
 import pandas as pd
@@ -134,8 +128,12 @@ def enumerate_stratified(stat_fn, y, strata, seed=RANDOM):
 
     Returns (observed, mid_p_upper, p_two, z, n_assignments, exact).
 
-    mid_p splits ties, so it cannot reach 0 and the attainable minimum is
-    0.5 / n_assignments -- the design's resolution ceiling.
+    mid_p splits ties, so it cannot reach 0. The attainable minimum -- the
+    design's resolution ceiling -- is 0.5 / n_assignments for a signed
+    statistic, but 1 / n_assignments for a statistic invariant to swapping
+    every label (energy distance, TDCA, CSP-KL), because each assignment
+    then ties with its complement. Designs with an incomplete stratum have
+    no complement pairs, so 0.5 / n_assignments applies there.
     """
     per = []
     for s in np.unique(strata):
@@ -157,7 +155,9 @@ def enumerate_stratified(stat_fn, y, strata, seed=RANDOM):
         exact = False
 
     obs   = stat_fn(y.astype(bool))
-    mid_p = (np.sum(stats > obs) + 0.5 * np.sum(stats == obs)) / len(stats)
+    # relative-tolerance ties: label-swap-invariant stats tie with their complement only up to float noise
+    tie   = np.isclose(stats, obs, rtol=1e-9, atol=0.0)
+    mid_p = (np.sum((stats > obs) & ~tie) + 0.5 * np.sum(tie)) / len(stats)
     p_two = min(1.0, 2 * min(mid_p, 1 - mid_p))
     z     = (obs - stats.mean()) / (stats.std(ddof=1) + 1e-12)
     return float(obs), float(mid_p), float(p_two), float(z), n_all, exact
@@ -361,7 +361,8 @@ def main():
         m      = len(g)
         # best case across subjects: most assignments -> smallest attainable p.
         # If even that cannot clear BH, no subject can reach significance.
-        floor  = 0.5 / int(g.n_assignments.max())
+        # swap-invariant (energy) stats tie with the complement: ceiling 1/n
+        floor  = (0.5 if signed else 1.0) / int(g.n_assignments.max())
         needed = 0.05 / m
 
         print(f'\n  {DS_LABEL.get(ds, ds)}  n={m} subjects, '
