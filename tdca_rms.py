@@ -1,15 +1,14 @@
 """
 PRE-SPECIFIED 13-09-2026, before any result from this file was computed.
 
-QUESTION (reviewer round 2, request 2: the missing cell of the 2x2)
+QUESTION
                 amplitude (signed RMS)        template (midpoint projection)
 fixed ROI       ROI RMS  (block_exact_erp_roi) A1   (tdca_ablation_exact)
 learned filter  THIS FILE: learned x RMS       TDCA (tdca_exact)
 Does a learned TDCA filter help when the held-out block is scored by signed
 amplitude, as the ROI is?
 
-METHOD (tdca.py imported, not modified; GED step via pattern_convergence._tdca_W,
-a verbatim copy of tdca.fold_decision's GED lines)
+METHOD 
 locked TDCA from h5_new/tdca_validated.json: k=15, L=4, shrink .02, 3 comp
 per LOO fold and per label assignment: W refitted on the training blocks
 held-out block score = RMS over time and the 3 components of
@@ -36,7 +35,7 @@ secondary  TDCA - learned x RMS   (scoring effect, learned filter)
            interaction (TDCA - A1) - (learned x RMS - ROI RMS)
            all on disc and ctrl, D1 and D2 (D2 flagged NOT INTERPRETED if
            more than half the participants are tied on the rank scale)
-READING (reviewer)
+READING
 learned x RMS ~ ROI RMS   scoring main effect, no learning benefit
 learned x RMS > ROI RMS   spatial learning helps amplitude scoring
 
@@ -172,7 +171,7 @@ def summarise():
                 for scale in ('z', 'rank'):
                     s = _desc(C[cn][arm][scale].xs(ds).values)
                     print(f'  {cn + " alone" if scale == "z" else "":40}{scale:7}{s["mean"]:>+8.3f}{s["t"]:>+8.2f}'
-                          f'{s["p"]:>8.4f}{s["wilcoxon_p"]:>8.4f}{s["ties"]:>6}{f"{s["pos"]}/{s["n"]}":>7}')
+                          f'{s["p"]:>8.4f}{s["wilcoxon_p"]:>8.4f}{s["ties"]:>6}{str(s["pos"]) + "/" + str(s["n"]):>7}')
                     out.append(dict(dataset=lab, arm=arm, contrast=f'{cn} alone', scale=scale, **s))
             for name, terms in CONTR:
                 res = {}
@@ -186,7 +185,7 @@ def summarise():
                 flag = (lab == 'D2' and res['rank']['ties'] / res['rank']['n'] > 0.5)
                 for scale, s in res.items():
                     print(f'  {name if scale == "z" else "":40}{scale:7}{s["mean"]:>+8.3f}{s["t"]:>+8.2f}'
-                          f'{s["p"]:>8.4f}{s["wilcoxon_p"]:>8.4f}{s["ties"]:>6}{f"{s["pos"]}/{s["n"]}":>7}'
+                          f'{s["p"]:>8.4f}{s["wilcoxon_p"]:>8.4f}{s["ties"]:>6}{str(s["pos"]) + "/" + str(s["n"]):>7}'
                           f'{"  NOT INTERPRETED (>50% tied)" if flag else ""}')
                     out.append(dict(dataset=lab, arm=arm, contrast=name, scale=scale,
                                     not_interpreted=flag, **s))

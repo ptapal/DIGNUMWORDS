@@ -164,8 +164,8 @@ def describe(v):
 
 def _fmt(label, s, extra=''):
     return (f'{label:32}{s["n"]:>4}{s["mean"]:>+9.3f}'
-            f'{f"  [{s["lo"]:+.2f},{s["hi"]:+.2f}]":>18}{s["t"]:>+8.2f}'
-            f'{s["p_two"]:>9.4f}{f"{s["k_pos"]}/{s["n"]}":>8}{extra}')
+            f'{"  [%+.2f,%+.2f]" % (s["lo"], s["hi"]):>18}{s["t"]:>+8.2f}'
+            f'{s["p_two"]:>9.4f}{str(s["k_pos"]) + "/" + str(s["n"]):>8}{extra}')
 
 
 def main():

@@ -1,7 +1,12 @@
 # DIGNUMWORDS
 
-Do spatial filters from SSVEP and BCI research extract more from frequency-tagging (FPVS) EEG
-than the fixed occipitotemporal region of interest (ROI) that FPVS studies normally use?
+In FPVS there is an ongoing challenge of determining whether the signal is of a conceptual or
+low-level perceptual origin, and the field's remedy is to redesign the stimuli. We show part of
+the problem is how the response is measured: scoring the waveform of the conventional
+occipitotemporal ROI, instead of its amplitude, recovers a response the standard analysis leaves
+at trend level. With that measure, a template learned from Arabic digits predicts condition in
+German number words, and the reverse, with no detectable loss relative to within-notation
+training, so the shared component cannot be explained by how the items look.
 
 Test case: automatic discrimination of numerical parity, within each participant, in two datasets.
 
@@ -16,11 +21,13 @@ FPVS quantifies the discrimination response as amplitude or signal-to-noise rati
 occipitotemporal channels (PO7, PO9, O1, I1, PO8, PO10, O2, I2; Retter et al., 2024). The ROI is
 assumed from prior work, and the response is summarised by its size.
 
-This repository asks two things:
+This repository asks three things:
 
-1. **How well.** Does a spatial filter learned from the data separate Parity from Control better
-   than that standard read-out?
+1. **How well.** Does a learned spatial filter, or a different way of scoring the same channels,
+   separate Parity from Control better than the standard measure?
 2. **Where.** Do learned filters place their weights on the ROI without being told where it is?
+3. **What kind of signal is it.** Does a template learned in one notation predict condition in
+   the other, which no visual account of the response can explain?
 
 
 ## Design
@@ -115,9 +122,15 @@ Per-participant z, discrimination arm, group mean.
 - **Where.** The pre-specified test of whether learned patterns concentrate on the ROI failed its
   validation at the observed effect size (planted sources recovered in fewer than half the
   participants). Learned topographies are therefore descriptive only.
+- **Not bandwidth.** Every operator is flat from 3 asymmetry harmonics to the whole cycle, and the
+  standard measure gains nothing from harmonics beyond the three it uses.
+- **Across notations.** A ROI waveform template learned on digits predicts condition in number
+  words (+0.62) and the reverse (+0.68), both significant after Holm, with no detectable loss
+  against within-notation training. The control arm stays flat. TDCA does not transfer.
 
 Caveat: Parity and Control regroup the same eight numerals, so item-level visual differences are
-not excluded. Cross-format transfer (train on digits, test on number words) is the planned test.
+not excluded within a notation. The cross-notation transfer is what addresses them, and only for
+the component shared between notations.
 
 
 ## Where to look first
@@ -132,6 +145,8 @@ not excluded. Cross-format transfer (train on digits, test on number words) is t
 | what TDCA's advantage comes from | `tdca_ablation.py`, `tdca_rms.py` |
 | whether learned filters find the ROI | `pattern_convergence.py`, `power_curve.py` |
 | digits versus number words | `modality_split.py` |
+| whether a template transfers across notation | `cross_format.py` |
+| whether the gain is bandwidth | `harmonic_ablation.py`, `standard_harmonics.py` |
 
 
 ## Repository layout
@@ -145,6 +160,10 @@ csp2.py                   common spatial patterns (supervised)
 tdca.py                   task-discriminant component analysis (supervised, spatiotemporal)
 tdca_ablation.py          TDCA variants: ROI channels only, no delays, no discriminant, etc.
 tdca_rms.py               TDCA filter scored by amplitude instead of waveform template
+tdca_amp.py               TDCA filter scored by the standard baseline-corrected amplitude
+harmonic_ablation.py      every operator at 3, 6, 11 and all asymmetry harmonics
+standard_harmonics.py     the standard measure at 3, 6 and 11 harmonics
+cross_format.py           train in one notation, test in the other
 pattern_convergence.py    do learned patterns concentrate on the ROI (validation failed)
 power_curve.py            size of the observed effect on the synthetic plant scale
 modality_split.py         digits and number words analysed separately
@@ -190,6 +209,9 @@ python standard_fpvs.py           # standard read-out and the comparisons agains
 python tdca.py --validate         # calibration and planted-effect check
 python tdca.py --run              # real labels; refuses to run before validation passes
 python tdca_ablation.py
+python harmonic_ablation.py
+python cross_format.py --gate     # calibration, recovery, specificity
+python cross_format.py --run      # real labels; refuses to run before the gate passes
 python summarise_results.py --csv
 ```
 

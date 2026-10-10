@@ -43,7 +43,7 @@ Sensitivity: the ROI in spatial_exact.csv (roi_diff / roi_mean, recomputed
 from the spatial cache) must agree with block_exact_erp_roi.csv; agreement
 is printed.
 
-KNOWN MISMATCHES (not fixable from CSVs; R3 addresses the first)
+KNOWN MISMATCHES
 - ROI and max-SNR score a signed RMS amplitude (Parity > Control). TDCA,
   CSP-KL and energy distance are label-swap invariant: they fire on any
   difference, in either direction. So a learned-minus-ROI gain mixes
@@ -123,8 +123,8 @@ def describe(v):
 
 def _fmt(label, s, extra=''):
     return (f'{label:34}{s["n"]:>4}{s["mean"]:>+9.3f}'
-            f'{f"  [{s["lo"]:+.2f},{s["hi"]:+.2f}]":>18}{s["t"]:>+8.2f}'
-            f'{s["p_two"]:>9.4f}{f"{s["k_pos"]}/{s["n"]}":>8}{extra}')
+            f'{"  [%+.2f,%+.2f]" % (s["lo"], s["hi"]):>18}{s["t"]:>+8.2f}'
+            f'{s["p_two"]:>9.4f}{str(s["k_pos"]) + "/" + str(s["n"]):>8}{extra}')
 
 
 def main():

@@ -94,9 +94,9 @@ def table_group():
             pm = np.clip(g['p'].values, 1e-9, 1 - 1e-9)
             zs = norm.isf(pm).sum() / np.sqrt(len(pm))
             print(f'{f:16}{lab:4}{s["n"]:>4}{s["mean"]:>+9.3f}'
-                  f'{f"  [{s['lo']:+.2f},{s['hi']:+.2f}]":>18}'
+                  f'{"  [%+.2f,%+.2f]" % (s["lo"], s["hi"]):>18}'
                   f'{s["t"]:>+8.2f}{zs:>+10.2f}{norm.sf(zs):>11.2e}'
-                  f'{f"{s['k']}/{s['n']}":>8}{s["sign_p"]:>9.4f}')
+                  f'{str(s["k"]) + "/" + str(s["n"]):>8}{s["sign_p"]:>9.4f}')
             rows.append(dict(table='group', feature=f, dataset=lab,
                              stouffer_z=zs, stouffer_p=norm.sf(zs), **s))
     return pd.DataFrame(rows)
@@ -121,9 +121,9 @@ def table_roi():
             s = _describe(v)
             _, pw = wilcoxon(v, alternative='greater')
             print(f'{f:18}{lab:4}{s["n"]:>4}{s["mean"]:>+10.3f}'
-                  f'{f"  [{s['lo']:+.2f},{s['hi']:+.2f}]":>18}'
+                  f'{"  [%+.2f,%+.2f]" % (s["lo"], s["hi"]):>18}'
                   f'{s["t"]:>+8.2f}{s["p"]:>9.4f}{pw:>9.4f}'
-                  f'{f"{s['k']}/{s['n']}":>8}')
+                  f'{str(s["k"]) + "/" + str(s["n"]):>8}')
             rows.append(dict(table='roi', feature=f, dataset=lab,
                              wilcoxon_p=pw, **s))
     return pd.DataFrame(rows)
@@ -154,9 +154,9 @@ def table_signal_vs_control():
             t, p = ttest_rel(a[idx], b[idx])
             _, pw = wilcoxon(v, alternative='greater')
             print(f'{label:22}{lab:4}{s["n"]:>4}{s["mean"]:>+10.3f}'
-                  f'{f"  [{s['lo']:+.2f},{s['hi']:+.2f}]":>18}'
+                  f'{"  [%+.2f,%+.2f]" % (s["lo"], s["hi"]):>18}'
                   f'{t:>+8.2f}{p/2:>9.4f}{pw:>9.4f}'
-                  f'{f"{s['k']}/{s['n']}":>8}')
+                  f'{str(s["k"]) + "/" + str(s["n"]):>8}')
             rows.append(dict(table='signal_vs_control', feature=label,
                              dataset=lab, t=t, p=p / 2, wilcoxon_p=pw,
                              n=s['n'], mean=s['mean'], lo=s['lo'], hi=s['hi'],
