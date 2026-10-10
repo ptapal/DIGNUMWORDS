@@ -10,10 +10,6 @@ training, so the shared component cannot be explained by how the items look.
 
 Test case: automatic discrimination of numerical parity, within each participant, in two datasets.
 
-Poster: CuttingGardens 2026, Groningen.
-Tapal, Volfart, Ansarinia & Schiltz, *Do SSVEP spatial filters outperform the FPVS ROI?
-A within-participant test on numerical parity*.
-
 
 ## Question
 
@@ -242,9 +238,6 @@ How to reach me:
 - open an issue or a pull request in this repository, which keeps the discussion attached to the
   code;
 - or email me: **polina.tapal.001@student.uni.lu**.
-
-I present this work at CuttingGardens 2026 in Groningen, where the poster is on display for the
-week. Come and find me there, or write at any time.
 
 
 ## References
